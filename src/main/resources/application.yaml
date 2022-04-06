@@ -3,7 +3,7 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://124.223.164.57:3306/subsidize_system?characterEncoding=utf-8&serverTimezone=GMT%2B8   # ????????????
+    url: jdbc:mysql://124.223.164.57:3306/subsidize_system?characterEncoding=utf-8&serverTimezone=GMT%2B8   # 设置时区为东八区北京时间
     username: root
     password: byfan@170307
   jpa:
@@ -16,17 +16,23 @@ spring:
   application:
     name: Subsidizesystem-server
 
-  # ????????
-  resources:
-    static-locations: classpath:/static/
-
+  # 上传文件大小
   servlet:
     multipart:
       max-file-size: 10MB
       max-request-size: 100MB
 
 
-  # spring????jackson?????json???????????
+  # 配置静态资源地址
   jackson:
-    time-zone: GMT+8    # ????????
-    date-format: yyyy-MM-dd HH:mm:ss  # ????????
+    time-zone: GMT+8    # 配置时区，东八区
+    date-format: yyyy-MM-dd HH:mm:ss  # 默认返回时间格式
+
+  mvc:
+    static-path-pattern: /**
+  web:
+    resources:
+      static-locations: classpath:/static/,classpath:/static/verifycode/
+
+staticpath: src/main/resources/static/
+verifycodepath: verifycode/

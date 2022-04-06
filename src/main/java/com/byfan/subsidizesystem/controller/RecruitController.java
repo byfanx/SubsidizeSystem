@@ -4,8 +4,11 @@ import com.byfan.subsidizesystem.common.CommonResponse;
 import com.byfan.subsidizesystem.common.BaseResponse;
 import com.byfan.subsidizesystem.exception.SubsidizeSystemException;
 import com.byfan.subsidizesystem.model.RecruitEntity;
+import com.byfan.subsidizesystem.model.SchoolEntity;
 import com.byfan.subsidizesystem.service.RecruitService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -113,6 +116,17 @@ public class RecruitController {
 			response.setMsg(e.getMessage());
 			return response;
 		}
+	}
+
+	@ApiOperation("审核招聘信息")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "recruitId", value = "招聘信息id", paramType = "query", required = true, dataType = "int"),
+			@ApiImplicitParam(name = "status", value = "审核状态", paramType = "query", required = true, dataType = "int"),
+	})
+	@RequestMapping(value = "/checkRecruitApprove",method = RequestMethod.GET)
+	public BaseResponse<RecruitEntity> checkRecruitApprove(Integer recruitId, Integer status) {
+		BaseResponse<RecruitEntity> response = new BaseResponse();
+		return response;
 	}
 
 }

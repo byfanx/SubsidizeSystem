@@ -6,6 +6,8 @@ import com.byfan.subsidizesystem.exception.SubsidizeSystemException;
 import com.byfan.subsidizesystem.model.StudentsEntity;
 import com.byfan.subsidizesystem.service.StudentsService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -113,6 +115,17 @@ public class StudentsController {
 			response.setMsg(e.getMessage());
 			return response;
 		}
+	}
+
+	@ApiOperation("审核学生认证")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "studentId", value = "学生id", paramType = "query", required = true, dataType = "int"),
+			@ApiImplicitParam(name = "status", value = "审核状态", paramType = "query", required = true, dataType = "int"),
+	})
+	@RequestMapping(value = "/checkStudentApprove",method = RequestMethod.GET)
+	public BaseResponse<StudentsEntity> checkStudentApprove(Integer studentId, Integer status) {
+		BaseResponse<StudentsEntity> response = new BaseResponse();
+		return response;
 	}
 
 }

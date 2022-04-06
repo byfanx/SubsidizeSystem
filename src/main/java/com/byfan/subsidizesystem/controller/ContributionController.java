@@ -4,8 +4,11 @@ import com.byfan.subsidizesystem.common.CommonResponse;
 import com.byfan.subsidizesystem.common.BaseResponse;
 import com.byfan.subsidizesystem.exception.SubsidizeSystemException;
 import com.byfan.subsidizesystem.model.ContributionEntity;
+import com.byfan.subsidizesystem.model.RecruitEntity;
 import com.byfan.subsidizesystem.service.ContributionService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -114,5 +117,17 @@ public class ContributionController {
 			return response;
 		}
 	}
+
+	@ApiOperation("审核捐款信息")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "recruitId", value = "捐款信息id", paramType = "query", required = true, dataType = "int"),
+			@ApiImplicitParam(name = "status", value = "审核状态", paramType = "query", required = true, dataType = "int"),
+	})
+	@RequestMapping(value = "/checkContributionApprove",method = RequestMethod.GET)
+	public BaseResponse<ContributionEntity> checkRecruitApprove(Integer contributionId, Integer status) {
+		BaseResponse<ContributionEntity> response = new BaseResponse();
+		return response;
+	}
+
 
 }

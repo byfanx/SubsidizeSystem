@@ -115,4 +115,42 @@ public class UserController {
 		}
 	}
 
+	/**
+	 * @Description 登录验证
+	 * @Author byfan
+	 * @Date 2022/4/6 22:27
+	 * @param user
+	 * @return com.byfan.subsidizesystem.common.BaseResponse<com.byfan.subsidizesystem.model.UserEntity>
+	 * @throws
+	 */
+	@ApiOperation("登录验证")
+	@RequestMapping(value = "/login",method = RequestMethod.POST)
+	public BaseResponse<UserEntity> login(UserEntity user){
+		BaseResponse<UserEntity> response = new BaseResponse();
+		return response;
+//		try{
+//			return response;
+//		}catch (SubsidizeSystemException e){
+//			log.error("login is except, e: ", e);
+//			response.setCode(e.getErrorCode());
+//			response.setMsg(e.getMessage());
+//			return response;
+//		}
+	}
+
+	/**
+	 * @Description 找回密码
+	 * @Author byfan
+	 * @Date 2022/4/6 22:27
+	 * @param user
+	 * @return com.byfan.subsidizesystem.common.BaseResponse<com.byfan.subsidizesystem.model.UserEntity>
+	 * @throws
+	 */
+	@ApiOperation("找回密码")
+	@RequestMapping(value = "/retrievePasswd",method = RequestMethod.POST)
+	public BaseResponse<UserEntity> retrievePasswd(UserEntity user) {
+		BaseResponse<UserEntity> response = new BaseResponse();
+		return response;
+	}
+
 }

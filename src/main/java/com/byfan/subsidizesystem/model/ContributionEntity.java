@@ -40,9 +40,9 @@ public class ContributionEntity implements Serializable {
 	private Integer userId;
 
 	/**
-	 * 捐款对象
+	 * 捐款对象id
 	 */
-	@ApiModelProperty(value = "捐款对象")
+	@ApiModelProperty(value = "捐款对象id")
 	@Column(name = "payee")
 	private Integer payee;
 

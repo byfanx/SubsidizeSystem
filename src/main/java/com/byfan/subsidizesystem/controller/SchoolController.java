@@ -4,8 +4,11 @@ import com.byfan.subsidizesystem.common.CommonResponse;
 import com.byfan.subsidizesystem.common.BaseResponse;
 import com.byfan.subsidizesystem.exception.SubsidizeSystemException;
 import com.byfan.subsidizesystem.model.SchoolEntity;
+import com.byfan.subsidizesystem.model.StudentsEntity;
 import com.byfan.subsidizesystem.service.SchoolService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -113,6 +116,17 @@ public class SchoolController {
 			response.setMsg(e.getMessage());
 			return response;
 		}
+	}
+
+	@ApiOperation("审核学校认证")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "schoolId", value = "学校id", paramType = "query", required = true, dataType = "int"),
+			@ApiImplicitParam(name = "status", value = "审核状态", paramType = "query", required = true, dataType = "int"),
+	})
+	@RequestMapping(value = "/checkSchoolApprove",method = RequestMethod.GET)
+	public BaseResponse<SchoolEntity> checkSchoolApprove(Integer schoolId, Integer status) {
+		BaseResponse<SchoolEntity> response = new BaseResponse();
+		return response;
 	}
 
 }
