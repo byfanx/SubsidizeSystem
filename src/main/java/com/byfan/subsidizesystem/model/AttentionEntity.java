@@ -47,9 +47,9 @@ public class AttentionEntity implements Serializable {
 	private Integer followedUserId;
 
 	/**
-	 * 认证的身份 1 贫困生  2 贫困学校
+	 * 认证的身份 4 贫困生  5 贫困学校
 	 */
-	@ApiModelProperty(value = "认证的身份 1 贫困生  2 贫困学校")
+	@ApiModelProperty(value = "认证的身份 4 学生  5 学校")
 	@Column(name = "approve_identity")
 	private Integer approveIdentity;
 

@@ -1,6 +1,8 @@
 package com.byfan.subsidizesystem.service;
 
+import com.byfan.subsidizesystem.common.PageData;
 import com.byfan.subsidizesystem.exception.SubsidizeSystemException;
+import com.byfan.subsidizesystem.form.QueryUserForm;
 import com.byfan.subsidizesystem.model.UserEntity;
 
 import java.util.List;
@@ -29,11 +31,14 @@ public interface UserService {
 	void deleteById(Integer id) throws SubsidizeSystemException;
 
 	/**
-	 * 查询全部
-	 * @return 
+	 * @Description 条件查询
+	 * @Author byfan
+	 * @Date 2022/4/7 23:13
+	 * @param queryUserForm
+	 * @return com.byfan.subsidizesystem.common.PageData<com.byfan.subsidizesystem.model.UserEntity>
 	 * @throws SubsidizeSystemException
 	 */
-	List<UserEntity> getAll() throws SubsidizeSystemException;
+	PageData<UserEntity> findByQuery(QueryUserForm queryUserForm) throws SubsidizeSystemException;
 
 	/**
 	 * 根据id查询
@@ -43,4 +48,24 @@ public interface UserService {
 	 */
 	UserEntity getById(Integer id) throws SubsidizeSystemException;
 
+	/**
+	 * @Description 用户登录
+	 * @Author byfan
+	 * @Date 2022/4/8 15:28
+	 * @param userName
+	 * @param passwd
+	 * @return void
+	 * @throws
+	 */
+	UserEntity login(String userName, String passwd) throws SubsidizeSystemException;
+
+	/**
+	 * @Description 找回密码
+	 * @Author byfan
+	 * @Date 2022/4/8 15:42
+	 * @param userName
+	 * @return com.byfan.subsidizesystem.model.UserEntity
+	 * @throws
+	 */
+	UserEntity retrievePasswd(String userName) throws SubsidizeSystemException;
 }

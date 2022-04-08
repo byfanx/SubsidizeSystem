@@ -3,6 +3,7 @@ package com.byfan.subsidizesystem.model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.Value;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -68,9 +69,17 @@ public class ContributionEntity implements Serializable {
 	private Integer auditorId;
 
 	/**
-	 * 捐款审核状态
+	 * 审核状态
 	 */
-	@ApiModelProperty(value = "捐款审核状态")
+	@ApiModelProperty(value = "审核状态 0 待审核  1 通过  2 拒绝")
+	@Column(name = "authorize_status")
+	private Integer authorizeStatus;
+
+
+	/**
+	 * 状态
+	 */
+	@ApiModelProperty(value = "状态 0 删除  1 正常")
 	@Column(name = "status")
 	private Integer status;
 

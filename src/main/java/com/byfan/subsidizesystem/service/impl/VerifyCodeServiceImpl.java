@@ -80,6 +80,12 @@ public class VerifyCodeServiceImpl implements IVerifyCodeService {
         ) {
             String code = generate(width, height, baos);
             String fileName = code+".jpeg";
+
+            File folder = new File(staticpath + verifyCodePath);
+            if (!folder.exists() || !folder.isDirectory()){
+                folder.mkdirs();
+            }
+
             FileOutputStream fos = new FileOutputStream(staticpath + verifyCodePath + fileName);
             fos.write(baos.toByteArray());
 

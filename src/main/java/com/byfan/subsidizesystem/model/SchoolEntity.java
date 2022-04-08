@@ -89,16 +89,23 @@ public class SchoolEntity implements Serializable {
 	private String authentication;
 
 	/**
+	 * 审核人id
+	 */
+	@ApiModelProperty(value = "审核人id")
+	@Column(name = "auditor_id")
+	private Integer auditorId;
+
+	/**
 	 * 认证状态
 	 */
-	@ApiModelProperty(value = "认证状态")
+	@ApiModelProperty(value = "认证状态 0 待审核  1 通过  2 拒绝")
 	@Column(name = "authorize_status")
 	private Integer authorizeStatus;
 
 	/**
 	 * 状态
 	 */
-	@ApiModelProperty(value = "状态")
+	@ApiModelProperty(value = "状态  0 删除  1 正常")
 	@Column(name = "status")
 	private Integer status;
 
@@ -109,5 +116,17 @@ public class SchoolEntity implements Serializable {
 	@CreatedDate
 	@Column(name = "create_time")
 	private Date createTime;
+
+	private UserEntity userEntity;
+
+	@OneToOne
+	@JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
+	public UserEntity getUserEntity() {
+		return userEntity;
+	}
+
+	public void setUserEntity(UserEntity userEntity){
+		this.userEntity = userEntity;
+	}
 
 }

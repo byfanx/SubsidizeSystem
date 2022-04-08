@@ -56,7 +56,7 @@ public class NoticeEntity implements Serializable {
 	/**
 	 * 状态
 	 */
-	@ApiModelProperty(value = "状态")
+	@ApiModelProperty(value = "状态 0 删除  1 正常")
 	@Column(name = "status")
 	private Integer status;
 

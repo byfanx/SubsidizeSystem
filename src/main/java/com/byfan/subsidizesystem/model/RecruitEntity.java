@@ -95,9 +95,16 @@ public class RecruitEntity implements Serializable {
 	private String email;
 
 	/**
+	 * 审核状态
+	 */
+	@ApiModelProperty(value = "审核状态 0 待审核  1 通过  2 拒绝")
+	@Column(name = "authorize_status")
+	private Integer authorizeStatus;
+
+	/**
 	 * 招聘状态
 	 */
-	@ApiModelProperty(value = "招聘状态")
+	@ApiModelProperty(value = "状态  0 删除  1 正常")
 	@Column(name = "status")
 	private Integer status;
 

@@ -2,7 +2,9 @@ package com.byfan.subsidizesystem.controller;
 
 import com.byfan.subsidizesystem.common.CommonResponse;
 import com.byfan.subsidizesystem.common.BaseResponse;
+import com.byfan.subsidizesystem.common.PageData;
 import com.byfan.subsidizesystem.exception.SubsidizeSystemException;
+import com.byfan.subsidizesystem.form.QueryUserForm;
 import com.byfan.subsidizesystem.model.UserEntity;
 import com.byfan.subsidizesystem.service.UserService;
 import io.swagger.annotations.Api;
@@ -78,10 +80,10 @@ public class UserController {
 	 */
 	@ApiOperation("查询全部用户信息")
 	@RequestMapping(value = "/getAll",method = RequestMethod.GET)
-	public BaseResponse<List<UserEntity>> getAll() {
-		BaseResponse<List<UserEntity>> response = new BaseResponse();
+	public BaseResponse<PageData<UserEntity>> getAll(QueryUserForm queryUserForm) {
+		BaseResponse<PageData<UserEntity>> response = new BaseResponse();
 		try {
-			List<UserEntity> all = userService.getAll();
+			PageData<UserEntity> all = userService.findByQuery(queryUserForm);
 			response.setData(all);
 			response.setCode(CommonResponse.OK.code);
 			return response;
@@ -119,38 +121,51 @@ public class UserController {
 	 * @Description 登录验证
 	 * @Author byfan
 	 * @Date 2022/4/6 22:27
-	 * @param user
+	 * @param userName
+	 * @param passwd
 	 * @return com.byfan.subsidizesystem.common.BaseResponse<com.byfan.subsidizesystem.model.UserEntity>
 	 * @throws
 	 */
 	@ApiOperation("登录验证")
 	@RequestMapping(value = "/login",method = RequestMethod.POST)
-	public BaseResponse<UserEntity> login(UserEntity user){
+	public BaseResponse<UserEntity> login(String userName, String passwd){
 		BaseResponse<UserEntity> response = new BaseResponse();
-		return response;
-//		try{
-//			return response;
-//		}catch (SubsidizeSystemException e){
-//			log.error("login is except, e: ", e);
-//			response.setCode(e.getErrorCode());
-//			response.setMsg(e.getMessage());
-//			return response;
-//		}
+		try{
+			UserEntity login = userService.login(userName, passwd);
+			response.setData(login);
+			response.setCode(CommonResponse.OK.code);
+			return response;
+		}catch (SubsidizeSystemException e){
+			log.error("login is except, e: ", e);
+			response.setCode(e.getErrorCode());
+			response.setMsg(e.getMessage());
+			return response;
+		}
 	}
 
 	/**
 	 * @Description 找回密码
 	 * @Author byfan
 	 * @Date 2022/4/6 22:27
-	 * @param user
+	 * @param userName
 	 * @return com.byfan.subsidizesystem.common.BaseResponse<com.byfan.subsidizesystem.model.UserEntity>
 	 * @throws
 	 */
 	@ApiOperation("找回密码")
 	@RequestMapping(value = "/retrievePasswd",method = RequestMethod.POST)
-	public BaseResponse<UserEntity> retrievePasswd(UserEntity user) {
+	public BaseResponse<UserEntity> retrievePasswd(String userName) {
 		BaseResponse<UserEntity> response = new BaseResponse();
-		return response;
+		try{
+			UserEntity retrievePasswd = userService.retrievePasswd(userName);
+			response.setData(retrievePasswd);
+			response.setCode(CommonResponse.OK.code);
+			return response;
+		}catch (SubsidizeSystemException e){
+			log.error("login is except, e: ", e);
+			response.setCode(e.getErrorCode());
+			response.setMsg(e.getMessage());
+			return response;
+		}
 	}
 
 }

@@ -54,9 +54,9 @@ public class UserEntity implements Serializable {
 	private String password;
 
 	/**
-	 * 用户角色
+	 * 用户角色  1 管理员 2 普通用户
 	 */
-	@ApiModelProperty(value = "用户角色")
+	@ApiModelProperty(value = "用户角色 1 管理员 2 普通用户")
 	@Column(name = "role")
 	private Integer role;
 
@@ -103,9 +103,9 @@ public class UserEntity implements Serializable {
 	private String securityQuestionAnswer;
 
 	/**
-	 * 状态
+	 * 状态  0 删除  1 正常
 	 */
-	@ApiModelProperty(value = "状态")
+	@ApiModelProperty(value = "状态 0 删除  1 正常")
 	@Column(name = "status")
 	private Integer status;
 
