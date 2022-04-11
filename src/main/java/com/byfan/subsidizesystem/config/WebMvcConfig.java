@@ -2,6 +2,7 @@ package com.byfan.subsidizesystem.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -36,4 +37,24 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/webjars/**")
                 .addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
+
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        // 自定义拦截器
+        RequestLogInterceptor logInterceptor = new RequestLogInterceptor();
+
+        // 排除拦截路径（swagger路径）
+        String[] excludePatterns = new String[]{
+                "/webjars/**",
+                "/swagger-resources",
+                "/swagger-resources/**",
+                "/doc.html",
+        };
+
+        // 注册拦截器
+        registry.addInterceptor(logInterceptor).addPathPatterns("/**").excludePathPatterns(excludePatterns);
+
+    }
+
 }
