@@ -20,7 +20,12 @@ public interface UserDao extends BaseRepository<UserEntity,Integer> {
     @Query("update UserEntity ue set ue.status=:status where ue.id=:id")
     void updateStatus(@Param("id") Integer id, @Param("status") Integer status);
 
-
     @Query("select ue from UserEntity ue where ue.userName=:userName and ue.status=1")
     List<UserEntity> findByUserName(@Param("userName") String userName);
+
+    @Query("select ue from UserEntity ue where ue.displayName like concat('%', :displayName, '%') and ue.status=1")
+    List<UserEntity> findByDisplayName(@Param("displayName") String displayName);
+
+    @Query("select ue from UserEntity ue where ue.id=:id")
+    UserEntity findAllById(@Param("id") Integer id);
 }

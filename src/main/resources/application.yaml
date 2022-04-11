@@ -3,14 +3,14 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://124.223.164.57:3306/subsidize_system?characterEncoding=utf-8&serverTimezone=GMT%2B8   # 设置时区为东八区北京时间
+    url: jdbc:mysql://124.223.164.57:3308/subsidize_system?characterEncoding=utf-8&serverTimezone=GMT%2B8   # 设置时区为东八区北京时间
     username: root
-    password: byfan@170307
+    password: 123456
   jpa:
     show-sql: true
-    generate-ddl: true
+    generate-ddl: false
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     properties:
       hibernate.format_sql: true
   application:
@@ -22,8 +22,6 @@ spring:
       max-file-size: 10MB
       max-request-size: 100MB
 
-
-  # 配置静态资源地址
   jackson:
     time-zone: GMT+8    # 配置时区，东八区
     date-format: yyyy-MM-dd HH:mm:ss  # 默认返回时间格式
@@ -34,5 +32,7 @@ spring:
     resources:
       static-locations: classpath:/static/,classpath:/static/verifycode/
 
-staticpath: src/main/resources/static/
-verifycodepath: verifycode/
+# 静态文件地址
+staticpath: src/main/resources/static/     # 本地启动项目用
+#staticpath: /home/                           # docker打包运行用
+verifycodepath: verifycode/                 # 验证码地址

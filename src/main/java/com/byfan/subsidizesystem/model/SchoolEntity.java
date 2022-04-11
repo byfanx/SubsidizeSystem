@@ -1,5 +1,6 @@
 package com.byfan.subsidizesystem.model;
 
+import com.byfan.subsidizesystem.bean.SchoolBean;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -21,7 +22,7 @@ import java.util.Date;
 @Entity
 @Data
 @Table(name = "school")
-public class SchoolEntity implements Serializable {
+public class SchoolEntity extends SchoolBean implements Serializable {
 
 	/**
 	 * id
@@ -117,16 +118,16 @@ public class SchoolEntity implements Serializable {
 	@Column(name = "create_time")
 	private Date createTime;
 
-	private UserEntity userEntity;
+//	private UserEntity userEntity;
 
-	@OneToOne
-	@JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
-	public UserEntity getUserEntity() {
-		return userEntity;
-	}
-
-	public void setUserEntity(UserEntity userEntity){
-		this.userEntity = userEntity;
-	}
+//	@OneToOne
+//	@JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
+//	public UserEntity getUserEntity() {
+//		return userEntity;
+//	}
+//
+//	public void setUserEntity(UserEntity userEntity){
+//		this.userEntity = userEntity;
+//	}
 
 }

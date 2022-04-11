@@ -110,7 +110,7 @@ public class UserServiceImpl implements UserService {
 		PageData<UserEntity> pageData = new PageData<>();
 		pageData.setCurrentPage(queryUserForm.getCurrentPage());
 		pageData.setPageSize(queryUserForm.getPageSize());
-		pageData.setTotal(pageData.getTotal());
+		pageData.setTotal((int) all.getTotalElements());
 		pageData.setTotalPage(all.getTotalPages());
 		pageData.setList(all.getContent());
 
@@ -138,6 +138,23 @@ public class UserServiceImpl implements UserService {
 	}
 
 	/**
+	 * @param id
+	 * @return com.byfan.subsidizesystem.model.UserEntity
+	 * @throws SubsidizeSystemException
+	 * @Description 根据id查询删除和未删除的
+	 * @Author byfan
+	 * @Date 2022/4/10 17:16
+	 */
+	@Override
+	public UserEntity getAllById(Integer id) throws SubsidizeSystemException {
+		if (id == null){
+			log.error("getAllById id is null!");
+			throw new SubsidizeSystemException(CommonResponse.PARAM_ERROR,"getAllById id is null!");
+		}
+		return userDao.findAllById(id);
+	}
+
+	/**
 	 * @Description 用户登录
 	 * @Author byfan
 	 * @Date 2022/4/8 15:28
@@ -147,20 +164,20 @@ public class UserServiceImpl implements UserService {
 	 * @throws
 	 */
 	@Override
-	public UserEntity login(String userName, String passwd) throws SubsidizeSystemException {
-		if(StringUtils.isBlank(userName) || StringUtils.isBlank(passwd)){
-			log.error("login userName or passwd is null!");
-			throw new SubsidizeSystemException(CommonResponse.PARAM_ERROR,"userName or passwd is null!");
+	public UserEntity login(String userName, String passwd, Integer approveIdentity) throws SubsidizeSystemException {
+		if(StringUtils.isBlank(userName) || StringUtils.isBlank(passwd) || approveIdentity == null){
+			log.error("login userName or passwd or approveIdentity is null!");
+			throw new SubsidizeSystemException(CommonResponse.PARAM_ERROR,"userName or passwd or approveIdentity is null!");
 		}
 		List<UserEntity> byUserName = userDao.findByUserName(userName);
-		if (!CollectionUtils.isEmpty(byUserName)){
+		if (CollectionUtils.isEmpty(byUserName) || !byUserName.get(0).getRole().equals(approveIdentity)){
+			log.info("login 用户不存在");
+			throw new SubsidizeSystemException(CommonResponse.RESOURCE_NOT_EXIST,"用户不存在");
+		}else {
 			if (byUserName.get(0) == null || !byUserName.get(0).getPassword().equals(passwd)){
 				log.info("login 密码错误");
 				throw new SubsidizeSystemException(CommonResponse.RESOURCE_NOT_EXIST,"密码错误");
 			}
-		}else {
-			log.info("login 用户不存在");
-			throw new SubsidizeSystemException(CommonResponse.RESOURCE_NOT_EXIST,"用户不存在");
 		}
 		return byUserName.get(0);
 	}
@@ -170,21 +187,40 @@ public class UserServiceImpl implements UserService {
 	 * @Author byfan
 	 * @Date 2022/4/8 15:42
 	 * @param userName
+	 * @param telephone
+	 * @param approveIdentity
 	 * @return com.byfan.subsidizesystem.model.UserEntity
 	 * @throws
 	 */
 	@Override
-	public UserEntity retrievePasswd(String userName) throws SubsidizeSystemException {
-		if (StringUtils.isBlank(userName)){
-			log.error("retrievePasswd userName is null!");
-			throw new SubsidizeSystemException(CommonResponse.PARAM_ERROR,"userName is null");
+	public UserEntity retrievePasswd(String userName, String telephone, Integer approveIdentity) throws SubsidizeSystemException {
+		if (StringUtils.isBlank(userName) || StringUtils.isBlank(telephone) || approveIdentity == null){
+			log.error("retrievePasswd userName or telephone or approveIdentity is null!");
+			throw new SubsidizeSystemException(CommonResponse.PARAM_ERROR,"userName or telephone or approveIdentity is null");
 		}
 		List<UserEntity> byUserName = userDao.findByUserName(userName);
-		if (CollectionUtils.isEmpty(byUserName)){
+		if (CollectionUtils.isEmpty(byUserName) || byUserName.get(0).getTelephone().equals(telephone) || byUserName.get(0).getRole() != approveIdentity){
 			log.info("retrievePasswd user is not exist!");
 			throw new SubsidizeSystemException(CommonResponse.RESOURCE_NOT_EXIST,"用户不存在");
 		}
 		return byUserName.get(0);
+	}
+
+	/**
+	 * @param displayName
+	 * @return java.util.List<com.byfan.subsidizesystem.model.UserEntity>
+	 * @throws SubsidizeSystemException
+	 * @Description 根据昵称查询用户
+	 * @Author byfan
+	 * @Date 2022/4/9 18:11
+	 */
+	@Override
+	public List<UserEntity> findByDisplayName(String displayName) throws SubsidizeSystemException {
+		if (StringUtils.isBlank(displayName)){
+			log.error("findByDisplayName displayName is null!");
+			throw new SubsidizeSystemException(CommonResponse.PARAM_ERROR,"displayName is null");
+		}
+		return userDao.findByDisplayName(displayName);
 	}
 
 }

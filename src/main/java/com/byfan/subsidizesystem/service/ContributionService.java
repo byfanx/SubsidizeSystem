@@ -1,6 +1,9 @@
 package com.byfan.subsidizesystem.service;
 
+import com.byfan.subsidizesystem.bean.ContributionBean;
+import com.byfan.subsidizesystem.common.PageData;
 import com.byfan.subsidizesystem.exception.SubsidizeSystemException;
+import com.byfan.subsidizesystem.form.QueryContributionForm;
 import com.byfan.subsidizesystem.model.ContributionEntity;
 
 import java.util.List;
@@ -33,7 +36,7 @@ public interface ContributionService {
 	 * @return 
 	 * @throws SubsidizeSystemException
 	 */
-	List<ContributionEntity> getAll() throws SubsidizeSystemException;
+	PageData<ContributionBean> findByQuery(QueryContributionForm queryContributionForm) throws SubsidizeSystemException;
 
 	/**
 	 * 根据id查询
@@ -41,6 +44,41 @@ public interface ContributionService {
 	 * @return 
 	 * @throws SubsidizeSystemException
 	 */
-	ContributionEntity getById(Integer id) throws SubsidizeSystemException;
+	ContributionBean getById(Integer id) throws SubsidizeSystemException;
 
+	/**
+	 * @Description 根据id更改审核状态
+	 * @Author byfan
+	 * @Date 2022/4/10 18:41
+	 * @param contributionId
+	 * @param authorizeStatus
+	 * @param auditorId
+	 * @return com.byfan.subsidizesystem.bean.ContributionBean
+	 * @throws SubsidizeSystemException
+	 */
+	ContributionBean checkRecruitApprove(Integer contributionId, Integer authorizeStatus, Integer auditorId) throws SubsidizeSystemException;
+
+	/**
+	 * @Description 根据捐款人id查询捐款信息
+	 * @Author byfan
+	 * @Date 2022/4/10 22:23
+	 * @param userId
+	 * @param currentPage
+	 * @param pageSize
+	 * @return com.byfan.subsidizesystem.common.PageData<com.byfan.subsidizesystem.bean.ContributionBean>
+	 * @throws SubsidizeSystemException
+	 */
+	PageData<ContributionBean> getByUserId(Integer userId, Integer currentPage, Integer pageSize) throws SubsidizeSystemException;
+
+	/**
+	 * @Description 根据被捐款人id获取捐信息
+	 * @Author byfan
+	 * @Date 2022/4/10 22:33
+	 * @param payeeId
+	 * @param currentPage
+	 * @param pageSize
+	 * @return com.byfan.subsidizesystem.common.PageData<com.byfan.subsidizesystem.bean.ContributionBean>
+	 * @throws SubsidizeSystemException
+	 */
+	PageData<ContributionBean> getByPayeeId(Integer payeeId, Integer currentPage, Integer pageSize) throws SubsidizeSystemException;
 }

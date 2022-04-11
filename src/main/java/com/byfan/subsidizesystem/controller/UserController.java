@@ -8,9 +8,12 @@ import com.byfan.subsidizesystem.form.QueryUserForm;
 import com.byfan.subsidizesystem.model.UserEntity;
 import com.byfan.subsidizesystem.service.UserService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,6 +27,7 @@ import java.util.List;
  */
 @Slf4j
 @Api(tags = "用户接口")
+@CrossOrigin
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
@@ -122,16 +126,21 @@ public class UserController {
 	 * @Author byfan
 	 * @Date 2022/4/6 22:27
 	 * @param userName
-	 * @param passwd
+	 * @param password
 	 * @return com.byfan.subsidizesystem.common.BaseResponse<com.byfan.subsidizesystem.model.UserEntity>
 	 * @throws
 	 */
 	@ApiOperation("登录验证")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "userName", value = "用户登录名", paramType = "query", required = true, dataType = "String"),
+			@ApiImplicitParam(name = "password", value = "密码", paramType = "query", required = true, dataType = "String"),
+			@ApiImplicitParam(name = "approveIdentity", value = "用户身份 1 管理员  2 普通用户", paramType = "query", required = true, dataType = "int"),
+	})
 	@RequestMapping(value = "/login",method = RequestMethod.POST)
-	public BaseResponse<UserEntity> login(String userName, String passwd){
+	public BaseResponse<UserEntity> login(String userName, String password, Integer approveIdentity){
 		BaseResponse<UserEntity> response = new BaseResponse();
 		try{
-			UserEntity login = userService.login(userName, passwd);
+			UserEntity login = userService.login(userName, password, approveIdentity);
 			response.setData(login);
 			response.setCode(CommonResponse.OK.code);
 			return response;
@@ -152,11 +161,16 @@ public class UserController {
 	 * @throws
 	 */
 	@ApiOperation("找回密码")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "userName", value = "用户登录名", paramType = "query", required = true, dataType = "String"),
+			@ApiImplicitParam(name = "telephone", value = "注册的手机号", paramType = "query", required = true, dataType = "String"),
+			@ApiImplicitParam(name = "approveIdentity", value = "用户身份 1 管理员  2 普通用户", paramType = "query", required = true, dataType = "int"),
+	})
 	@RequestMapping(value = "/retrievePasswd",method = RequestMethod.POST)
-	public BaseResponse<UserEntity> retrievePasswd(String userName) {
+	public BaseResponse<UserEntity> retrievePasswd(String userName, String telephone, Integer approveIdentity) {
 		BaseResponse<UserEntity> response = new BaseResponse();
 		try{
-			UserEntity retrievePasswd = userService.retrievePasswd(userName);
+			UserEntity retrievePasswd = userService.retrievePasswd(userName, telephone, approveIdentity);
 			response.setData(retrievePasswd);
 			response.setCode(CommonResponse.OK.code);
 			return response;

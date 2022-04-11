@@ -43,4 +43,23 @@ public interface StudentsService {
 	 */
 	StudentsEntity getById(Integer id) throws SubsidizeSystemException;
 
+	/**
+	 * @Description 根据名称查询学生
+	 * @Author byfan
+	 * @Date 2022/4/9 18:11
+	 * @param name
+	 * @return java.util.List<com.byfan.subsidizesystem.model.StudentsEntity>
+	 * @throws SubsidizeSystemException
+	 */
+	List<StudentsEntity> findByName(String name) throws SubsidizeSystemException;
+
+	/**
+	 * @Description 根据id查询删除和未删除的学生
+	 * @Author byfan
+	 * @Date 2022/4/10 17:30
+	 * @param id
+	 * @return com.byfan.subsidizesystem.model.StudentsEntity
+	 * @throws SubsidizeSystemException
+	 */
+    StudentsEntity getAllById(Integer id) throws SubsidizeSystemException;
 }

@@ -43,9 +43,16 @@ public class ContributionEntity implements Serializable {
 	/**
 	 * 捐款对象id
 	 */
-	@ApiModelProperty(value = "捐款对象id")
+	@ApiModelProperty(value = "被捐款对象id")
 	@Column(name = "payee")
 	private Integer payee;
+
+	/**
+	 * 捐款对象身份
+	 */
+	@ApiModelProperty(value = "被捐款对象身份  3 平台 4 贫困生 5 贫困学校")
+	@Column(name = "approve_identity")
+	private Integer approveIdentity;
 
 	/**
 	 * 捐款金额

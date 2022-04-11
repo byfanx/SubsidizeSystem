@@ -1,10 +1,13 @@
 package com.byfan.subsidizesystem.service.impl;
 
 import com.byfan.subsidizesystem.common.CommonResponse;
+import com.byfan.subsidizesystem.common.StatusEnum;
 import com.byfan.subsidizesystem.exception.SubsidizeSystemException;
 import com.byfan.subsidizesystem.model.StudentsEntity;
 import com.byfan.subsidizesystem.dao.StudentsDao;
+import com.byfan.subsidizesystem.model.UserEntity;
 import com.byfan.subsidizesystem.service.StudentsService;
+import com.byfan.subsidizesystem.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +27,9 @@ public class StudentsServiceImpl implements StudentsService {
 
 	@Autowired
 	private StudentsDao studentsDao;
+
+	@Autowired
+	private UserService userService;
 
 	/**
 	 * 新增/保存
@@ -72,8 +78,53 @@ public class StudentsServiceImpl implements StudentsService {
 			log.error("getById id is null!");
 			throw new SubsidizeSystemException(CommonResponse.PARAM_ERROR,"getById id is null!");
 		}
+		StudentsEntity entity = getAllById(id);
+		if (null == entity || entity.getStatus() == StatusEnum.DELETED.code){
+			log.info("getById student is not exist!");
+			throw new SubsidizeSystemException(CommonResponse.RESOURCE_NOT_EXIST,"学生不存在");
+		}
+		return entity;
+	}
+
+	/**
+	 * @param name
+	 * @return java.util.List<com.byfan.subsidizesystem.model.StudentsEntity>
+	 * @throws SubsidizeSystemException
+	 * @Description 根据名称查询学生
+	 * @Author byfan
+	 * @Date 2022/4/9 18:11
+	 */
+	@Override
+	public List<StudentsEntity> findByName(String name) throws SubsidizeSystemException {
+		if (StringUtils.isBlank(name)){
+			log.error("findByName name is null!");
+			throw new SubsidizeSystemException(CommonResponse.PARAM_ERROR,"name is null");
+		}
+		return studentsDao.findByName(name);
+	}
+
+	/**
+	 * @param id
+	 * @return com.byfan.subsidizesystem.model.StudentsEntity
+	 * @throws SubsidizeSystemException
+	 * @Description 根据id查询删除和未删除的学生
+	 * @Author byfan
+	 * @Date 2022/4/10 17:30
+	 */
+	@Override
+	public StudentsEntity getAllById(Integer id) throws SubsidizeSystemException {
+		if (id == null){
+			log.error("getAllById id is null!");
+			throw new SubsidizeSystemException(CommonResponse.PARAM_ERROR,"getAllById id is null!");
+		}
 		Optional<StudentsEntity> optional = studentsDao.findById(id);
-		return optional.orElse(null);
+		StudentsEntity student = null;
+		if (optional.isPresent()){
+			student = optional.get();
+			UserEntity user = userService.getAllById(student.getUserId());
+			student.setUserEntity(user);
+		}
+		return student;
 	}
 
 }

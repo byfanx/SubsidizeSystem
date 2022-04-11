@@ -109,4 +109,15 @@ public class StudentsEntity implements Serializable {
 	@Column(name = "create_time")
 	private Date createTime;
 
+	private UserEntity userEntity;
+
+	@OneToOne
+	@JoinColumn(name = "user_id", referencedColumnName = "id",insertable = false,updatable = false)
+	public UserEntity getUserEntity() {
+		return userEntity;
+	}
+
+	public void setUserEntity(UserEntity userEntity){
+		this.userEntity = userEntity;
+	}
 }

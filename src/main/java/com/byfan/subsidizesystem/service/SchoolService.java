@@ -43,4 +43,23 @@ public interface SchoolService {
 	 */
 	SchoolEntity getById(Integer id) throws SubsidizeSystemException;
 
+	/**
+	 * @Description 根据名称查询学校
+	 * @Author byfan
+	 * @Date 2022/4/9 18:11
+	 * @param name
+	 * @return java.util.List<com.byfan.subsidizesystem.model.SchoolEntity>
+	 * @throws SubsidizeSystemException
+	 */
+	List<SchoolEntity> findByName(String name) throws SubsidizeSystemException;
+
+	/**
+	 * @Description 根据id查询删除和未删除的学校
+	 * @Author byfan
+	 * @Date 2022/4/10 17:34
+	 * @param id
+	 * @return com.byfan.subsidizesystem.model.SchoolEntity
+	 * @throws SubsidizeSystemException
+	 */
+    SchoolEntity getAllById(Integer id) throws SubsidizeSystemException;
 }

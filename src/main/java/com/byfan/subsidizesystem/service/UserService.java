@@ -49,23 +49,46 @@ public interface UserService {
 	UserEntity getById(Integer id) throws SubsidizeSystemException;
 
 	/**
+	 * @Description 根据id和状态进行查询
+	 * @Author byfan
+	 * @Date 2022/4/10 17:16
+	 * @param id
+	 * @return com.byfan.subsidizesystem.model.UserEntity
+	 * @throws SubsidizeSystemException
+	 */
+	UserEntity getAllById(Integer id) throws SubsidizeSystemException;
+
+	/**
 	 * @Description 用户登录
 	 * @Author byfan
 	 * @Date 2022/4/8 15:28
 	 * @param userName
 	 * @param passwd
+	 * @param approveIdentity
 	 * @return void
 	 * @throws
 	 */
-	UserEntity login(String userName, String passwd) throws SubsidizeSystemException;
+	UserEntity login(String userName, String passwd, Integer approveIdentity) throws SubsidizeSystemException;
 
 	/**
 	 * @Description 找回密码
 	 * @Author byfan
 	 * @Date 2022/4/8 15:42
 	 * @param userName
+	 * @param telephone
+	 * @param approveIdentity
 	 * @return com.byfan.subsidizesystem.model.UserEntity
 	 * @throws
 	 */
-	UserEntity retrievePasswd(String userName) throws SubsidizeSystemException;
+	UserEntity retrievePasswd(String userName, String telephone, Integer approveIdentity) throws SubsidizeSystemException;
+
+	/**
+	 * @Description 根据昵称查询用户
+	 * @Author byfan
+	 * @Date 2022/4/9 18:11
+	 * @param displayName
+	 * @return java.util.List<com.byfan.subsidizesystem.model.UserEntity>
+	 * @throws SubsidizeSystemException
+	 */
+	List<UserEntity> findByDisplayName(String displayName) throws SubsidizeSystemException;
 }
