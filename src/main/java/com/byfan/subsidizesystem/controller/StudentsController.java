@@ -2,7 +2,10 @@ package com.byfan.subsidizesystem.controller;
 
 import com.byfan.subsidizesystem.common.CommonResponse;
 import com.byfan.subsidizesystem.common.BaseResponse;
+import com.byfan.subsidizesystem.common.PageData;
 import com.byfan.subsidizesystem.exception.SubsidizeSystemException;
+import com.byfan.subsidizesystem.form.QueryStudentForm;
+import com.byfan.subsidizesystem.model.SchoolEntity;
 import com.byfan.subsidizesystem.model.StudentsEntity;
 import com.byfan.subsidizesystem.service.StudentsService;
 import io.swagger.annotations.Api;
@@ -82,10 +85,10 @@ public class StudentsController {
 	 */
 	@ApiOperation("查询全部学生信息")
 	@RequestMapping(value = "/getAll",method = RequestMethod.GET)
-	public BaseResponse<List<StudentsEntity>> getAll() {
-		BaseResponse<List<StudentsEntity>> response = new BaseResponse();
+	public BaseResponse<PageData<StudentsEntity>> getAll(QueryStudentForm studentForm) {
+		BaseResponse<PageData<StudentsEntity>> response = new BaseResponse();
 		try {
-			List<StudentsEntity> all = studentsService.getAll();
+			PageData<StudentsEntity> all = studentsService.findByQuery(studentForm);
 			response.setData(all);
 			response.setCode(CommonResponse.OK.code);
 			return response;
@@ -122,12 +125,24 @@ public class StudentsController {
 	@ApiOperation("审核学生认证")
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "studentId", value = "学生id", paramType = "query", required = true, dataType = "int"),
-			@ApiImplicitParam(name = "status", value = "审核状态", paramType = "query", required = true, dataType = "int"),
+			@ApiImplicitParam(name = "authorizeStatus", value = "审核状态  0 待审核  1 通过  2 拒绝", paramType = "query", required = true, dataType = "int"),
+			@ApiImplicitParam(name = "auditorId", value = "审核人id", paramType = "query", required = true, dataType = "int"),
+
 	})
 	@RequestMapping(value = "/checkStudentApprove",method = RequestMethod.GET)
-	public BaseResponse<StudentsEntity> checkStudentApprove(Integer studentId, Integer status) {
+	public BaseResponse<StudentsEntity> checkStudentApprove(Integer studentId, Integer authorizeStatus, Integer auditorId) {
 		BaseResponse<StudentsEntity> response = new BaseResponse();
-		return response;
+		try{
+			StudentsEntity student = studentsService.checkStudentApprove(studentId, authorizeStatus, auditorId);
+			response.setData(student);
+			response.setCode(CommonResponse.OK.code);
+			return response;
+		}catch (SubsidizeSystemException e){
+			log.error("checkStudentApprove is except ,e: ", e);
+			response.setCode(e.getErrorCode());
+			response.setMsg(e.getMessage());
+			return response;
+		}
 	}
 
 }

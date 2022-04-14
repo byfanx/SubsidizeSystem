@@ -61,8 +61,8 @@ public class SchoolServiceImpl implements SchoolService {
 	@Override
 	public SchoolEntity save(SchoolEntity school) throws SubsidizeSystemException {
 		if (school== null){
-			log.error("save user is null");
-			throw new SubsidizeSystemException(CommonResponse.PARAM_ERROR,"user is null");
+			log.error("save school is null");
+			throw new SubsidizeSystemException(CommonResponse.PARAM_ERROR,"school is null");
 		}
 		if (school.getId() != null){
 			SchoolEntity sch = getById(school.getId());
@@ -266,13 +266,13 @@ public class SchoolServiceImpl implements SchoolService {
 	public SchoolEntity checkSchoolApprove(Integer schoolId, Integer authorizeStatus, Integer auditorId) throws SubsidizeSystemException {
 		if (schoolId == null || authorizeStatus == null || auditorId == null){
 			log.error("checkSchoolApprove schoolId or authorizeStatus or auditorId is null!");
-			throw new SubsidizeSystemException(CommonResponse.PARAM_ERROR,"contributionId or authorizeStatus or auditorId is null!");
+			throw new SubsidizeSystemException(CommonResponse.PARAM_ERROR,"schoolId or authorizeStatus or auditorId is null!");
 		}
 		SchoolEntity entity = schoolDao.getById(schoolId);
 		entity.setAuthorizeStatus(authorizeStatus);
 		entity.setAuditorId(auditorId);
 		SchoolEntity save = schoolDao.save(entity);
-		return save;
+		return assembleSchool(save);
 	}
 
 
@@ -290,9 +290,9 @@ public class SchoolServiceImpl implements SchoolService {
 
 		UserEntity user = userService.getAllById(school.getUserId());
 		if (user == null){
-			school.setUserDisplayNameName("暂无");
+			school.setUserDisplayName("暂无");
 		} else {
-			school.setUserDisplayNameName(user.getDisplayName());
+			school.setUserDisplayName(user.getDisplayName());
 		}
 
 		UserEntity auditor = userService.getAllById(school.getAuditorId());

@@ -139,7 +139,7 @@ public class SchoolController {
 			response.setCode(CommonResponse.OK.code);
 			return response;
 		}catch (SubsidizeSystemException e){
-			log.error("checkContributionApprove is except ,e: ", e);
+			log.error("checkSchoolApprove is except ,e: ", e);
 			response.setCode(e.getErrorCode());
 			response.setMsg(e.getMessage());
 			return response;

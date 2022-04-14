@@ -1,6 +1,5 @@
 package com.byfan.subsidizesystem.bean;
 
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -9,15 +8,15 @@ import lombok.ToString;
 import java.util.List;
 
 /**
- * @ClassName: SchoolBean
+ * @ClassName: StudentBean
  * @Description:
  * @Author: byfan
- * @Date: 2022/4/10 23:50
+ * @Date: 2022/4/14 11:52
  */
-@ApiModel("学校类")
+@ApiModel(value = "学生类")
 @Data
 @ToString
-public class SchoolBean {
+public class StudentBean {
     @ApiModelProperty(value = "用户昵称")
     private String userDisplayName;
 

@@ -1,5 +1,6 @@
 package com.byfan.subsidizesystem.model;
 
+import com.byfan.subsidizesystem.bean.StudentBean;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -21,13 +22,14 @@ import java.util.Date;
 @Entity
 @Data
 @Table(name = "students")
-public class StudentsEntity implements Serializable {
+public class StudentsEntity extends StudentBean implements Serializable {
 
 	/**
 	 * id
 	 */
 	@ApiModelProperty(value = "id")
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Integer id;
 
@@ -48,7 +50,7 @@ public class StudentsEntity implements Serializable {
 	/**
 	 * 性别
 	 */
-	@ApiModelProperty(value = "性别")
+	@ApiModelProperty(value = "性别  1 男  2 女")
 	@Column(name = "gender")
 	private Integer gender;
 
@@ -116,15 +118,15 @@ public class StudentsEntity implements Serializable {
 	@Column(name = "create_time")
 	private Date createTime;
 
-	private UserEntity userEntity;
-
-	@OneToOne
-	@JoinColumn(name = "user_id", referencedColumnName = "id",insertable = false,updatable = false)
-	public UserEntity getUserEntity() {
-		return userEntity;
-	}
-
-	public void setUserEntity(UserEntity userEntity){
-		this.userEntity = userEntity;
-	}
+//	private UserEntity userEntity;
+//
+//	@OneToOne
+//	@JoinColumn(name = "user_id", referencedColumnName = "id",insertable = false,updatable = false)
+//	public UserEntity getUserEntity() {
+//		return userEntity;
+//	}
+//
+//	public void setUserEntity(UserEntity userEntity){
+//		this.userEntity = userEntity;
+//	}
 }
