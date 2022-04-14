@@ -25,8 +25,8 @@ public class RequestLogInterceptor implements HandlerInterceptor {
 //            requestDetails.put("request_url", request.getRequestURL());
             requestDetails.put("request_url", request.getRequestURI());
             requestDetails.put("request_method", request.getMethod());
-//            requestDetails.put("request_parameter", request.getParameterMap());
-            requestDetails.put("request_parameter", request.getQueryString());
+            requestDetails.put("request_parameter", request.getParameterMap());
+//            requestDetails.put("request_parameter", request.getQueryString());
             log.info("request details ：{}", JSON.toJSON(requestDetails));
         } catch (Exception e) {
             log.error("RequestLogInterceptor Log Record error ", e);

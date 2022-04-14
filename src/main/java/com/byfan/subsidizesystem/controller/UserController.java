@@ -134,13 +134,12 @@ public class UserController {
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "userName", value = "用户登录名", paramType = "query", required = true, dataType = "String"),
 			@ApiImplicitParam(name = "password", value = "密码", paramType = "query", required = true, dataType = "String"),
-			@ApiImplicitParam(name = "approveIdentity", value = "用户身份 1 管理员  2 普通用户", paramType = "query", required = true, dataType = "int"),
 	})
 	@RequestMapping(value = "/login",method = RequestMethod.POST)
-	public BaseResponse<UserEntity> login(String userName, String password, Integer approveIdentity){
+	public BaseResponse<UserEntity> login(String userName, String password){
 		BaseResponse<UserEntity> response = new BaseResponse();
 		try{
-			UserEntity login = userService.login(userName, password, approveIdentity);
+			UserEntity login = userService.login(userName, password);
 			response.setData(login);
 			response.setCode(CommonResponse.OK.code);
 			return response;
@@ -164,13 +163,12 @@ public class UserController {
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "userName", value = "用户登录名", paramType = "query", required = true, dataType = "String"),
 			@ApiImplicitParam(name = "telephone", value = "注册的手机号", paramType = "query", required = true, dataType = "String"),
-			@ApiImplicitParam(name = "approveIdentity", value = "用户身份 1 管理员  2 普通用户", paramType = "query", required = true, dataType = "int"),
 	})
 	@RequestMapping(value = "/retrievePasswd",method = RequestMethod.POST)
-	public BaseResponse<UserEntity> retrievePasswd(String userName, String telephone, Integer approveIdentity) {
+	public BaseResponse<UserEntity> retrievePasswd(String userName, String telephone) {
 		BaseResponse<UserEntity> response = new BaseResponse();
 		try{
-			UserEntity retrievePasswd = userService.retrievePasswd(userName, telephone, approveIdentity);
+			UserEntity retrievePasswd = userService.retrievePasswd(userName, telephone);
 			response.setData(retrievePasswd);
 			response.setCode(CommonResponse.OK.code);
 			return response;

@@ -1,5 +1,6 @@
 package com.byfan.subsidizesystem.model;
 
+import com.byfan.subsidizesystem.bean.RecruitBean;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -21,27 +22,28 @@ import java.util.Date;
 @Entity
 @Data
 @Table(name = "recruit")
-public class RecruitEntity implements Serializable {
+public class RecruitEntity extends RecruitBean implements Serializable {
 
 	/**
 	 * id
 	 */
 	@ApiModelProperty(value = "id")
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Integer id;
 
 	/**
 	 * 用户id
 	 */
-	@ApiModelProperty(value = "用户id")
+	@ApiModelProperty(value = "发布单位id")
 	@Column(name = "user_id")
 	private Integer userId;
 
 	/**
-	 * 招聘级别 1 系统 2 学校
+	 * 招聘级别 3 系统 5 学校
 	 */
-	@ApiModelProperty(value = "招聘级别 1 系统 2 学校")
+	@ApiModelProperty(value = "招聘级别 3 系统 5 学校")
 	@Column(name = "level")
 	private Integer level;
 
@@ -93,6 +95,13 @@ public class RecruitEntity implements Serializable {
 	@ApiModelProperty(value = "邮箱")
 	@Column(name = "email")
 	private String email;
+
+	/**
+	 * 审核人id
+	 */
+	@ApiModelProperty(value = "审核人id")
+	@Column(name = "auditor_id")
+	private Integer auditorId;
 
 	/**
 	 * 审核状态

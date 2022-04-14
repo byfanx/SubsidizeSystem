@@ -2,9 +2,10 @@ package com.byfan.subsidizesystem.controller;
 
 import com.byfan.subsidizesystem.common.CommonResponse;
 import com.byfan.subsidizesystem.common.BaseResponse;
+import com.byfan.subsidizesystem.common.PageData;
 import com.byfan.subsidizesystem.exception.SubsidizeSystemException;
+import com.byfan.subsidizesystem.form.QueryRecruitForm;
 import com.byfan.subsidizesystem.model.RecruitEntity;
-import com.byfan.subsidizesystem.model.SchoolEntity;
 import com.byfan.subsidizesystem.service.RecruitService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -16,8 +17,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 /**
  * @Description 招聘控制层
@@ -83,10 +82,10 @@ public class RecruitController {
 	 */
 	@ApiOperation("查询全部招聘信息")
 	@RequestMapping(value = "/getAll",method = RequestMethod.GET)
-	public BaseResponse<List<RecruitEntity>> getAll() {
-		BaseResponse<List<RecruitEntity>> response = new BaseResponse();
+	public BaseResponse<PageData<RecruitEntity>> getAll(QueryRecruitForm recruitForm) {
+		BaseResponse<PageData<RecruitEntity>> response = new BaseResponse();
 		try {
-			List<RecruitEntity> all = recruitService.getAll();
+			PageData<RecruitEntity> all = recruitService.findByQuery(recruitForm);
 			response.setData(all);
 			response.setCode(CommonResponse.OK.code);
 			return response;
@@ -123,12 +122,22 @@ public class RecruitController {
 	@ApiOperation("审核招聘信息")
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "recruitId", value = "招聘信息id", paramType = "query", required = true, dataType = "int"),
-			@ApiImplicitParam(name = "status", value = "审核状态", paramType = "query", required = true, dataType = "int"),
+			@ApiImplicitParam(name = "auditorId", value = "审核人id", paramType = "query", required = true, dataType = "int"),
+			@ApiImplicitParam(name = "status", value = "审核状态 0 待审核  1 通过  2 拒绝", paramType = "query", required = true, dataType = "int"),
 	})
 	@RequestMapping(value = "/checkRecruitApprove",method = RequestMethod.GET)
-	public BaseResponse<RecruitEntity> checkRecruitApprove(Integer recruitId, Integer status) {
+	public BaseResponse<RecruitEntity> checkRecruitApprove(Integer recruitId, Integer auditorId, Integer status) {
 		BaseResponse<RecruitEntity> response = new BaseResponse();
-		return response;
+		try {
+			recruitService.checkRecruitApprove(recruitId,auditorId,status);
+			response.setCode(CommonResponse.OK.code);
+			return response;
+		} catch (SubsidizeSystemException e) {
+			log.error("checkRecruitApprove is except ,e: ", e);
+			response.setCode(e.getErrorCode());
+			response.setMsg(e.getMessage());
+			return response;
+		}
 	}
 
 }

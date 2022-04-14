@@ -1,8 +1,11 @@
 package com.byfan.subsidizesystem.controller;
 
+import com.byfan.subsidizesystem.bean.ContributionBean;
 import com.byfan.subsidizesystem.common.CommonResponse;
 import com.byfan.subsidizesystem.common.BaseResponse;
+import com.byfan.subsidizesystem.common.PageData;
 import com.byfan.subsidizesystem.exception.SubsidizeSystemException;
+import com.byfan.subsidizesystem.form.QuerySchoolForm;
 import com.byfan.subsidizesystem.model.SchoolEntity;
 import com.byfan.subsidizesystem.model.StudentsEntity;
 import com.byfan.subsidizesystem.service.SchoolService;
@@ -12,6 +15,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -83,10 +87,10 @@ public class SchoolController {
 	 */
 	@ApiOperation("查询全部学校信息")
 	@RequestMapping(value = "/getAll",method = RequestMethod.GET)
-	public BaseResponse<List<SchoolEntity>> getAll() {
-		BaseResponse<List<SchoolEntity>> response = new BaseResponse();
+	public BaseResponse<PageData<SchoolEntity>> getAll(QuerySchoolForm schoolForm) {
+		BaseResponse<PageData<SchoolEntity>> response = new BaseResponse();
 		try {
-			List<SchoolEntity> all = schoolService.getAll();
+			PageData<SchoolEntity> all = schoolService.findByQuery(schoolForm);
 			response.setData(all);
 			response.setCode(CommonResponse.OK.code);
 			return response;
@@ -123,12 +127,23 @@ public class SchoolController {
 	@ApiOperation("审核学校认证")
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "schoolId", value = "学校id", paramType = "query", required = true, dataType = "int"),
-			@ApiImplicitParam(name = "status", value = "审核状态", paramType = "query", required = true, dataType = "int"),
+			@ApiImplicitParam(name = "authorizeStatus", value = "审核状态  0 待审核  1 通过  2 拒绝", paramType = "query", required = true, dataType = "int"),
+			@ApiImplicitParam(name = "auditorId", value = "审核人id", paramType = "query", required = true, dataType = "int"),
 	})
 	@RequestMapping(value = "/checkSchoolApprove",method = RequestMethod.GET)
-	public BaseResponse<SchoolEntity> checkSchoolApprove(Integer schoolId, Integer status) {
+	public BaseResponse<SchoolEntity> checkSchoolApprove(Integer schoolId, Integer authorizeStatus, Integer auditorId) {
 		BaseResponse<SchoolEntity> response = new BaseResponse();
-		return response;
+		try{
+			SchoolEntity school = schoolService.checkSchoolApprove(schoolId, authorizeStatus, auditorId);
+			response.setData(school);
+			response.setCode(CommonResponse.OK.code);
+			return response;
+		}catch (SubsidizeSystemException e){
+			log.error("checkContributionApprove is except ,e: ", e);
+			response.setCode(e.getErrorCode());
+			response.setMsg(e.getMessage());
+			return response;
+		}
 	}
 
 }

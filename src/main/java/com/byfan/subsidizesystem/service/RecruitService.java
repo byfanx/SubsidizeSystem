@@ -1,6 +1,8 @@
 package com.byfan.subsidizesystem.service;
 
+import com.byfan.subsidizesystem.common.PageData;
 import com.byfan.subsidizesystem.exception.SubsidizeSystemException;
+import com.byfan.subsidizesystem.form.QueryRecruitForm;
 import com.byfan.subsidizesystem.model.RecruitEntity;
 
 import java.util.List;
@@ -33,7 +35,7 @@ public interface RecruitService {
 	 * @return 
 	 * @throws SubsidizeSystemException
 	 */
-	List<RecruitEntity> getAll() throws SubsidizeSystemException;
+	PageData<RecruitEntity> findByQuery(QueryRecruitForm recruitForm) throws SubsidizeSystemException;
 
 	/**
 	 * 根据id查询
@@ -43,4 +45,15 @@ public interface RecruitService {
 	 */
 	RecruitEntity getById(Integer id) throws SubsidizeSystemException;
 
+	/**
+	 * @Description 审核招聘信息
+	 * @Author byfan
+	 * @Date 2022/4/12 11:27
+	 * @param recruitId
+	 * @param auditorId
+	 * @param status
+	 * @return com.byfan.subsidizesystem.model.RecruitEntity
+	 * @throws SubsidizeSystemException
+	 */
+    RecruitEntity checkRecruitApprove(Integer recruitId, Integer auditorId, Integer status) throws SubsidizeSystemException;
 }

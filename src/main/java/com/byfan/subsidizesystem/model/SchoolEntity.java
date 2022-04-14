@@ -11,6 +11,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @Description 学校表实体类
@@ -90,6 +91,13 @@ public class SchoolEntity extends SchoolBean implements Serializable {
 	private String authentication;
 
 	/**
+	 * 图片列表
+	 */
+	@ApiModelProperty(value = "图片集")
+	@Column(name = "images")
+	private String images;
+
+	/**
 	 * 审核人id
 	 */
 	@ApiModelProperty(value = "审核人id")
@@ -117,17 +125,5 @@ public class SchoolEntity extends SchoolBean implements Serializable {
 	@CreatedDate
 	@Column(name = "create_time")
 	private Date createTime;
-
-//	private UserEntity userEntity;
-
-//	@OneToOne
-//	@JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
-//	public UserEntity getUserEntity() {
-//		return userEntity;
-//	}
-//
-//	public void setUserEntity(UserEntity userEntity){
-//		this.userEntity = userEntity;
-//	}
 
 }

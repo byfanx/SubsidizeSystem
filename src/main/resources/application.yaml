@@ -32,7 +32,10 @@ spring:
     resources:
       static-locations: classpath:/static/,classpath:/static/verifycode/
 
+
 # 静态文件地址
-staticpath: src/main/resources/static/     # 本地启动项目用
+staticpath: src/main/resources/static/        # 本地启动项目用
 #staticpath: /home/                           # docker打包运行用
-verifycodepath: verifycode/                 # 验证码地址
+imagepath: images/                            # 图片文件夹
+verifycodepath: verifycode/                   # 验证码地址
+noPicturesYetPath: ${imagepath}暂无图片.png    # 暂无图片地址

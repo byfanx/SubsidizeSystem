@@ -8,6 +8,7 @@ import com.byfan.subsidizesystem.form.QueryUserForm;
 import com.byfan.subsidizesystem.model.UserEntity;
 import com.byfan.subsidizesystem.dao.UserDao;
 import com.byfan.subsidizesystem.service.UserService;
+import com.byfan.subsidizesystem.utils.MyUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +51,9 @@ public class UserServiceImpl implements UserService {
 		if (user.getId() != null){
 			Optional<UserEntity> byId = userDao.findById(user.getId());
 			if (byId.isPresent()){
-				user = byId.get();
+				UserEntity u = byId.get();
+				MyUtils.copyPropertiesIgnoreNull(user,u);
+				user = u;
 			}else {
 				log.error("save user is resource not exist!");
 				throw new SubsidizeSystemException(CommonResponse.RESOURCE_NOT_EXIST);
@@ -70,6 +73,11 @@ public class UserServiceImpl implements UserService {
 		if (id == null){
 			log.error("deleteById id is null!");
 			throw new SubsidizeSystemException(CommonResponse.PARAM_ERROR,"id is null!");
+		}
+		UserEntity byId = getById(id);
+		if (byId == null || byId.getStatus() == StatusEnum.DELETED.code){
+			log.info("deleteById user is not exist!");
+			throw new SubsidizeSystemException(CommonResponse.RESOURCE_NOT_EXIST,"用户不存在");
 		}
 		userDao.updateStatus(id, StatusEnum.DELETED.code);
 	}
@@ -104,6 +112,8 @@ public class UserServiceImpl implements UserService {
 
 		Example<UserEntity> example = Example.of(user,matcher);
 		Sort sort = Sort.by(Sort.Direction.DESC, "createTime");
+		queryUserForm.setCurrentPage(queryUserForm.getCurrentPage() <=0 ? 1 : queryUserForm.getCurrentPage());
+		queryUserForm.setPageSize(queryUserForm.getPageSize() <=0 ? 20 : queryUserForm.getPageSize());
 		Pageable pageable = PageRequest.of(queryUserForm.getCurrentPage() - 1, queryUserForm.getPageSize(), sort);
 		Page<UserEntity> all = userDao.findAll(example, pageable);
 
@@ -164,17 +174,17 @@ public class UserServiceImpl implements UserService {
 	 * @throws
 	 */
 	@Override
-	public UserEntity login(String userName, String passwd, Integer approveIdentity) throws SubsidizeSystemException {
-		if(StringUtils.isBlank(userName) || StringUtils.isBlank(passwd) || approveIdentity == null){
-			log.error("login userName or passwd or approveIdentity is null!");
-			throw new SubsidizeSystemException(CommonResponse.PARAM_ERROR,"userName or passwd or approveIdentity is null!");
+	public UserEntity login(String userName, String passwd) throws SubsidizeSystemException {
+		if(StringUtils.isBlank(userName) || StringUtils.isBlank(passwd)) {
+			log.error("login userName or passwd is null!");
+			throw new SubsidizeSystemException(CommonResponse.PARAM_ERROR,"userName or passwd is null!");
 		}
 		List<UserEntity> byUserName = userDao.findByUserName(userName);
-		if (CollectionUtils.isEmpty(byUserName) || !byUserName.get(0).getRole().equals(approveIdentity)){
+		if (CollectionUtils.isEmpty(byUserName) || byUserName.get(0) == null){
 			log.info("login 用户不存在");
 			throw new SubsidizeSystemException(CommonResponse.RESOURCE_NOT_EXIST,"用户不存在");
 		}else {
-			if (byUserName.get(0) == null || !byUserName.get(0).getPassword().equals(passwd)){
+			if (!byUserName.get(0).getPassword().equals(passwd)){
 				log.info("login 密码错误");
 				throw new SubsidizeSystemException(CommonResponse.RESOURCE_NOT_EXIST,"密码错误");
 			}
@@ -188,18 +198,17 @@ public class UserServiceImpl implements UserService {
 	 * @Date 2022/4/8 15:42
 	 * @param userName
 	 * @param telephone
-	 * @param approveIdentity
 	 * @return com.byfan.subsidizesystem.model.UserEntity
 	 * @throws
 	 */
 	@Override
-	public UserEntity retrievePasswd(String userName, String telephone, Integer approveIdentity) throws SubsidizeSystemException {
-		if (StringUtils.isBlank(userName) || StringUtils.isBlank(telephone) || approveIdentity == null){
+	public UserEntity retrievePasswd(String userName, String telephone) throws SubsidizeSystemException {
+		if (StringUtils.isBlank(userName) || StringUtils.isBlank(telephone)){
 			log.error("retrievePasswd userName or telephone or approveIdentity is null!");
 			throw new SubsidizeSystemException(CommonResponse.PARAM_ERROR,"userName or telephone or approveIdentity is null");
 		}
 		List<UserEntity> byUserName = userDao.findByUserName(userName);
-		if (CollectionUtils.isEmpty(byUserName) || byUserName.get(0).getTelephone().equals(telephone) || byUserName.get(0).getRole() != approveIdentity){
+		if (CollectionUtils.isEmpty(byUserName) || !byUserName.get(0).getTelephone().equals(telephone)){
 			log.info("retrievePasswd user is not exist!");
 			throw new SubsidizeSystemException(CommonResponse.RESOURCE_NOT_EXIST,"用户不存在");
 		}

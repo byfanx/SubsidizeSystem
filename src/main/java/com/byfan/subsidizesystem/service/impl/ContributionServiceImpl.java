@@ -13,6 +13,7 @@ import com.byfan.subsidizesystem.service.ContributionService;
 import com.byfan.subsidizesystem.service.SchoolService;
 import com.byfan.subsidizesystem.service.StudentsService;
 import com.byfan.subsidizesystem.service.UserService;
+import com.byfan.subsidizesystem.utils.MyUtils;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -63,10 +64,17 @@ public class ContributionServiceImpl implements ContributionService {
 	 */
 	@Override
 	public ContributionEntity save(ContributionEntity contribution) throws SubsidizeSystemException {
-		if (contribution != null && contribution.getId() == null){
+		if (contribution.getId() == null){
 			contribution.setStatus(StatusEnum.USING.code);
 			contribution.setAuditorId(0);
 			contribution.setAuthorizeStatus(ApprovalStatusEnum.WAIT.code);
+		}else {
+			Optional<ContributionEntity> byId = contributionDao.findById(contribution.getId());
+			if (byId.isPresent()){
+				ContributionEntity ce = byId.get();
+				MyUtils.copyPropertiesIgnoreNull(contribution, ce);
+				contribution = ce;
+			}
 		}
 		return contributionDao.save(contribution);
 	}
@@ -82,7 +90,13 @@ public class ContributionServiceImpl implements ContributionService {
 			log.error("deleteById id is null!");
 			throw new SubsidizeSystemException(CommonResponse.PARAM_ERROR,"deleteById id is null!");
 		}
-		contributionDao.deleteById(id);
+		ContributionBean byId = getById(id);
+		if (byId == null || byId.getStatus() == StatusEnum.DELETED.code){
+			log.info("deleteById contribution is not exist!");
+			throw new SubsidizeSystemException(CommonResponse.RESOURCE_NOT_EXIST,"捐款信息不存在");
+		}
+		byId.setStatus(StatusEnum.DELETED.code);
+		save(byId);
 	}
 
 	/**
@@ -95,6 +109,8 @@ public class ContributionServiceImpl implements ContributionService {
 
 		Sort sort = Sort.by(Sort.Direction.DESC,"createTime");
 		queryContributionForm.setCurrentPage(queryContributionForm.getCurrentPage() <= 0 ? 1 : queryContributionForm.getCurrentPage());
+		queryContributionForm.setPageSize(queryContributionForm.getPageSize() <=0 ? 20 : queryContributionForm.getPageSize());
+
 		Pageable pageable = PageRequest.of(queryContributionForm.getCurrentPage()-1, queryContributionForm.getPageSize(), sort);
 
 		Specification<ContributionEntity> specification = new Specification<ContributionEntity>() {
@@ -226,8 +242,8 @@ public class ContributionServiceImpl implements ContributionService {
 	@Override
 	public ContributionBean checkRecruitApprove(Integer contributionId, Integer authorizeStatus, Integer auditorId) throws SubsidizeSystemException {
 		if (contributionId == null || authorizeStatus == null || auditorId == null){
-			log.error("checkRecruitApprove contributionId or status or auditorId is null!");
-			throw new SubsidizeSystemException(CommonResponse.PARAM_ERROR,"contributionId or status or auditorId is null!");
+			log.error("checkRecruitApprove contributionId or authorizeStatus or auditorId is null!");
+			throw new SubsidizeSystemException(CommonResponse.PARAM_ERROR,"contributionId or authorizeStatus or auditorId is null!");
 		}
 		ContributionEntity entity = contributionDao.getById(contributionId);
 		entity.setAuthorizeStatus(authorizeStatus);

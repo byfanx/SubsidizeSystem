@@ -81,6 +81,13 @@ public class StudentsEntity implements Serializable {
 	private String authentication;
 
 	/**
+	 * 图片列表
+	 */
+	@ApiModelProperty(value = "图片集")
+	@Column(name = "images")
+	private String images;
+
+	/**
 	 * 审核人id
 	 */
 	@ApiModelProperty(value = "审核人id")

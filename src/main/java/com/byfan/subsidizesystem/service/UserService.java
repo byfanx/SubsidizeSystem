@@ -64,11 +64,10 @@ public interface UserService {
 	 * @Date 2022/4/8 15:28
 	 * @param userName
 	 * @param passwd
-	 * @param approveIdentity
 	 * @return void
 	 * @throws
 	 */
-	UserEntity login(String userName, String passwd, Integer approveIdentity) throws SubsidizeSystemException;
+	UserEntity login(String userName, String passwd) throws SubsidizeSystemException;
 
 	/**
 	 * @Description 找回密码
@@ -76,11 +75,10 @@ public interface UserService {
 	 * @Date 2022/4/8 15:42
 	 * @param userName
 	 * @param telephone
-	 * @param approveIdentity
 	 * @return com.byfan.subsidizesystem.model.UserEntity
 	 * @throws
 	 */
-	UserEntity retrievePasswd(String userName, String telephone, Integer approveIdentity) throws SubsidizeSystemException;
+	UserEntity retrievePasswd(String userName, String telephone) throws SubsidizeSystemException;
 
 	/**
 	 * @Description 根据昵称查询用户

@@ -63,7 +63,12 @@ public class StudentsServiceImpl implements StudentsService {
 	 */
 	@Override
 	public List<StudentsEntity> getAll() throws SubsidizeSystemException {
-		return studentsDao.findAll();
+		List<StudentsEntity> all = studentsDao.findAll();
+//		for (StudentsEntity stu : all){
+//
+//		}
+
+		return all;
 	}
 
 	/**

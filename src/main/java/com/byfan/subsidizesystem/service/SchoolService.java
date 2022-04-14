@@ -1,6 +1,8 @@
 package com.byfan.subsidizesystem.service;
 
+import com.byfan.subsidizesystem.common.PageData;
 import com.byfan.subsidizesystem.exception.SubsidizeSystemException;
+import com.byfan.subsidizesystem.form.QuerySchoolForm;
 import com.byfan.subsidizesystem.model.SchoolEntity;
 
 import java.util.List;
@@ -33,7 +35,7 @@ public interface SchoolService {
 	 * @return 
 	 * @throws SubsidizeSystemException
 	 */
-	List<SchoolEntity> getAll() throws SubsidizeSystemException;
+	PageData<SchoolEntity> findByQuery(QuerySchoolForm schoolForm) throws SubsidizeSystemException;
 
 	/**
 	 * 根据id查询
@@ -62,4 +64,16 @@ public interface SchoolService {
 	 * @throws SubsidizeSystemException
 	 */
     SchoolEntity getAllById(Integer id) throws SubsidizeSystemException;
+
+	/**
+	 * @Description 根据id审核学校状态
+	 * @Author byfan
+	 * @Date 2022/4/13 23:29
+	 * @param schoolId
+	 * @param authorizeStatus
+	 * @param auditorId
+	 * @return com.byfan.subsidizesystem.model.SchoolEntity
+	 * @throws SubsidizeSystemException
+	 */
+	SchoolEntity checkSchoolApprove(Integer schoolId, Integer authorizeStatus, Integer auditorId) throws SubsidizeSystemException;
 }
