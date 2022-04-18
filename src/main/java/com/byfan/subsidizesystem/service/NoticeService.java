@@ -1,6 +1,8 @@
 package com.byfan.subsidizesystem.service;
 
+import com.byfan.subsidizesystem.common.PageData;
 import com.byfan.subsidizesystem.exception.SubsidizeSystemException;
+import com.byfan.subsidizesystem.form.QueryNoticeForm;
 import com.byfan.subsidizesystem.model.NoticeEntity;
 
 import java.util.List;
@@ -33,7 +35,7 @@ public interface NoticeService {
 	 * @return 
 	 * @throws SubsidizeSystemException
 	 */
-	List<NoticeEntity> getAll() throws SubsidizeSystemException;
+	PageData<NoticeEntity> findByQuery(QueryNoticeForm noticeForm) throws SubsidizeSystemException;
 
 	/**
 	 * 根据id查询

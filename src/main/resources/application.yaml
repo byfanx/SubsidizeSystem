@@ -39,3 +39,4 @@ staticpath: src/main/resources/static/        # 本地启动项目用
 imagepath: images/                            # 图片文件夹
 verifycodepath: verifycode/                   # 验证码地址
 noPicturesYetPath: ${imagepath}暂无图片.png    # 暂无图片地址
+allowedfiletypes: .png,.jpg,.jpg              # 支持上传的文件类型

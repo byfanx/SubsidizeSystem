@@ -1,5 +1,6 @@
 package com.byfan.subsidizesystem.model;
 
+import com.byfan.subsidizesystem.bean.NoticeBean;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -21,7 +22,7 @@ import java.util.Date;
 @Entity
 @Data
 @Table(name = "notice")
-public class NoticeEntity implements Serializable {
+public class NoticeEntity extends NoticeBean implements Serializable {
 
 	/**
 	 * id
@@ -35,7 +36,7 @@ public class NoticeEntity implements Serializable {
 	/**
 	 * 发布人
 	 */
-	@ApiModelProperty(value = "发布人")
+	@ApiModelProperty(value = "发布人id")
 	@Column(name = "user_id")
 	private Integer userId;
 

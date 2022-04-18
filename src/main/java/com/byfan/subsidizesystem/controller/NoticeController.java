@@ -2,7 +2,9 @@ package com.byfan.subsidizesystem.controller;
 
 import com.byfan.subsidizesystem.common.CommonResponse;
 import com.byfan.subsidizesystem.common.BaseResponse;
+import com.byfan.subsidizesystem.common.PageData;
 import com.byfan.subsidizesystem.exception.SubsidizeSystemException;
+import com.byfan.subsidizesystem.form.QueryNoticeForm;
 import com.byfan.subsidizesystem.model.NoticeEntity;
 import com.byfan.subsidizesystem.service.NoticeService;
 import io.swagger.annotations.Api;
@@ -80,10 +82,10 @@ public class NoticeController {
 	 */
 	@ApiOperation("查询全部公告信息")
 	@RequestMapping(value = "/getAll",method = RequestMethod.GET)
-	public BaseResponse<List<NoticeEntity>> getAll() {
-		BaseResponse<List<NoticeEntity>> response = new BaseResponse();
+	public BaseResponse<PageData<NoticeEntity>> getAll(QueryNoticeForm queryNoticeForm) {
+		BaseResponse<PageData<NoticeEntity>> response = new BaseResponse();
 		try {
-			List<NoticeEntity> all = noticeService.getAll();
+			PageData<NoticeEntity> all = noticeService.findByQuery(queryNoticeForm);
 			response.setData(all);
 			response.setCode(CommonResponse.OK.code);
 			return response;
