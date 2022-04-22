@@ -1,12 +1,18 @@
 package com.byfan.subsidizesystem.service.impl;
 
+import com.byfan.subsidizesystem.bean.AuthenticationInfoBean;
+import com.byfan.subsidizesystem.common.AuthenticationEnum;
 import com.byfan.subsidizesystem.common.CommonResponse;
 import com.byfan.subsidizesystem.common.PageData;
 import com.byfan.subsidizesystem.common.StatusEnum;
 import com.byfan.subsidizesystem.exception.SubsidizeSystemException;
 import com.byfan.subsidizesystem.form.QueryUserForm;
+import com.byfan.subsidizesystem.model.SchoolEntity;
+import com.byfan.subsidizesystem.model.StudentsEntity;
 import com.byfan.subsidizesystem.model.UserEntity;
 import com.byfan.subsidizesystem.dao.UserDao;
+import com.byfan.subsidizesystem.service.SchoolService;
+import com.byfan.subsidizesystem.service.StudentsService;
 import com.byfan.subsidizesystem.service.UserService;
 import com.byfan.subsidizesystem.utils.MyUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +38,12 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserDao userDao;
+
+	@Autowired
+	private StudentsService studentsService;
+
+	@Autowired
+	private SchoolService schoolService;
 
 	/**
 	 * 新增/保存
@@ -232,4 +244,31 @@ public class UserServiceImpl implements UserService {
 		return userDao.findByDisplayName(displayName);
 	}
 
+	/**
+	 * @Description 根据用户id获取认证信息
+	 * @Author byfan
+	 * @Date 2022/4/21 23:09
+	 * @param userId
+	 * @return com.byfan.subsidizesystem.bean.AuthenticationInfoBean
+	 * @throws SubsidizeSystemException
+	 */
+	@Override
+	public AuthenticationInfoBean getAuthenticationInfor(Integer userId) throws SubsidizeSystemException {
+		if (userId == null){
+			log.error("getAuthenticationInfor userId is null");
+			throw new SubsidizeSystemException(CommonResponse.PARAM_ERROR,"userId is null");
+		}
+		AuthenticationInfoBean authenticationInfoBean = new AuthenticationInfoBean();
+		SchoolEntity school = schoolService.getByUserId(userId);
+		if (school != null && school.getStatus() == StatusEnum.USING.code){
+			authenticationInfoBean.setAuthentication(AuthenticationEnum.SCHOOL.code);
+			authenticationInfoBean.setSchool(school);
+		}
+		StudentsEntity student = studentsService.getByUserId(userId);
+		if (student != null && student.getStatus() == StatusEnum.USING.code){
+			authenticationInfoBean.setAuthentication(AuthenticationEnum.STUDENT.code);
+			authenticationInfoBean.setStudent(student);
+		}
+		return authenticationInfoBean;
+	}
 }

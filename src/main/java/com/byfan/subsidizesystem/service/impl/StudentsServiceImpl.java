@@ -130,7 +130,7 @@ public class StudentsServiceImpl implements StudentsService {
 				}
 				// 查询条件：学生名称
 				if (!StringUtils.isBlank(studentForm.getStudentName())){
-					predicateList.add(cb.like(root.get("name"), "%" + studentForm.getStudentName()));
+					predicateList.add(cb.like(root.get("name"), "%" + studentForm.getStudentName() + "%"));
 				}
 				// 查询条件：性别
 				if (studentForm.getGender() != null){
@@ -138,12 +138,18 @@ public class StudentsServiceImpl implements StudentsService {
 				}
 				// 查询条件：地址
 				if (!StringUtils.isBlank(studentForm.getAddress())){
-					predicateList.add(cb.like(root.get("address"), "%" + studentForm.getAddress()));
+					predicateList.add(cb.like(root.get("address"), "%" + studentForm.getAddress() + "%"));
 				}
 				// 查询条件：联系电话
 				if (!StringUtils.isBlank(studentForm.getTelephone())){
-					predicateList.add(cb.like(root.get("telephone"), "%" + studentForm.getTelephone()));
+					predicateList.add(cb.like(root.get("telephone"), "%" + studentForm.getTelephone() + "%"));
 				}
+
+				// 查询条件：邮箱
+				if (!StringUtils.isBlank(studentForm.getEmail())){
+					predicateList.add(cb.like(root.get("email"), "%" + studentForm.getEmail() + "%"));
+				}
+
 				// 查询条件：审核人名称
 				if (!StringUtils.isBlank(studentForm.getAuditorName())){
 					List<UserEntity> userList = userService.findByDisplayName(studentForm.getAuditorName());
@@ -265,6 +271,26 @@ public class StudentsServiceImpl implements StudentsService {
 		entity.setAuditorId(auditorId);
 		StudentsEntity save = studentsDao.save(entity);
 		return assembleStudent(save);
+	}
+
+	/**
+	 * @Description 根据用户id查询认证信息
+	 * @Author byfan
+	 * @Date 2022/4/22 13:58
+	 * @param userId
+	 * @return com.byfan.subsidizesystem.model.StudentsEntity
+	 * @throws SubsidizeSystemException
+	 */
+	@Override
+	public StudentsEntity getByUserId(Integer userId) throws SubsidizeSystemException {
+		if (userId == null){
+			log.error("getByUserId userId is null");
+		}
+		StudentsEntity students = studentsDao.findAllByUserId(userId);
+		if (students != null){
+			students = assembleStudent(students);
+		}
+		return students;
 	}
 
 	/**

@@ -15,4 +15,6 @@ public interface SchoolDao extends BaseRepository<SchoolEntity,Integer> {
 
     @Query("select se from SchoolEntity se where se.name like concat('%', :name, '%')  and se.status=1")
     List<SchoolEntity> findByName(@Param("name") String name);
+
+    SchoolEntity findAllByUserId(@Param("userId") Integer userId);
 }

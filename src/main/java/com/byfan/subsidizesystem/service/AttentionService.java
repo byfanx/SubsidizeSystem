@@ -1,6 +1,8 @@
 package com.byfan.subsidizesystem.service;
 
+import com.byfan.subsidizesystem.common.PageData;
 import com.byfan.subsidizesystem.exception.SubsidizeSystemException;
+import com.byfan.subsidizesystem.form.QueryAttentionForm;
 import com.byfan.subsidizesystem.model.AttentionEntity;
 
 import java.util.List;
@@ -33,7 +35,7 @@ public interface AttentionService {
 	 * @return 
 	 * @throws SubsidizeSystemException
 	 */
-	List<AttentionEntity> getAll() throws SubsidizeSystemException;
+	PageData<AttentionEntity> findByQuery(QueryAttentionForm attentionForm) throws SubsidizeSystemException;
 
 	/**
 	 * 根据id查询

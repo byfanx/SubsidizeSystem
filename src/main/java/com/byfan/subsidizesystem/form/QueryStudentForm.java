@@ -32,6 +32,9 @@ public class QueryStudentForm extends PageForm{
     @ApiModelProperty(value = "联系电话")
     private String telephone;
 
+    @ApiModelProperty(value = "邮箱")
+    private String email;
+
     @ApiModelProperty(value = "审核人名称")
     private String auditorName;
 

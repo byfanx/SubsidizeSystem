@@ -170,7 +170,7 @@ public class NoticeServiceImpl implements NoticeService {
 				notice = optional.get();
 			}
 		}
-		return notice;
+		return assembleNotice(notice);
 	}
 
 
@@ -183,7 +183,7 @@ public class NoticeServiceImpl implements NoticeService {
 	 * @throws
 	 */
 	private NoticeEntity assembleNotice(NoticeEntity notice) throws SubsidizeSystemException {
-		UserEntity user = userService.getAllById(notice.getId());
+		UserEntity user = userService.getAllById(notice.getUserId());
 		if (user == null){
 			notice.setUserDisplayName("暂无");
 		}else {

@@ -1,5 +1,6 @@
 package com.byfan.subsidizesystem.controller;
 
+import com.byfan.subsidizesystem.bean.AuthenticationInfoBean;
 import com.byfan.subsidizesystem.common.CommonResponse;
 import com.byfan.subsidizesystem.common.BaseResponse;
 import com.byfan.subsidizesystem.common.PageData;
@@ -179,5 +180,26 @@ public class UserController {
 			return response;
 		}
 	}
+
+	@ApiOperation("根据用户id查询认证信息")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "userId", value = "用户id", paramType = "query", required = true, dataType = "int"),
+	})
+	@RequestMapping(value = "/getAuthenticationInfo", method = RequestMethod.GET)
+	public BaseResponse<AuthenticationInfoBean> getAuthenticationInfo(Integer userId){
+		BaseResponse<AuthenticationInfoBean> response = new BaseResponse();
+		try{
+			AuthenticationInfoBean authenticationInfo = userService.getAuthenticationInfor(userId);
+			response.setData(authenticationInfo);
+			response.setCode(CommonResponse.OK.code);
+			return response;
+		}catch (SubsidizeSystemException e){
+			log.error("login is except, e: ", e);
+			response.setCode(e.getErrorCode());
+			response.setMsg(e.getMessage());
+			return response;
+		}
+	}
+
 
 }

@@ -1,5 +1,6 @@
 package com.byfan.subsidizesystem.model;
 
+import com.byfan.subsidizesystem.bean.AttentionBean;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -21,7 +22,7 @@ import java.util.Date;
 @Entity
 @Data
 @Table(name = "attention")
-public class AttentionEntity implements Serializable {
+public class AttentionEntity extends AttentionBean implements Serializable {
 
 	/**
 	 * id

@@ -76,4 +76,14 @@ public interface StudentsService {
 	 * @throws SubsidizeSystemException
 	 */
 	StudentsEntity checkStudentApprove(Integer studentId, Integer authorizeStatus, Integer auditorId) throws SubsidizeSystemException;
+
+	/**
+	 * @Description 根据用户id查询认证信息
+	 * @Author byfan
+	 * @Date 2022/4/22 13:58
+	 * @param userId
+	 * @return com.byfan.subsidizesystem.model.StudentsEntity
+	 * @throws SubsidizeSystemException
+	 */
+    StudentsEntity getByUserId(Integer userId) throws SubsidizeSystemException;
 }

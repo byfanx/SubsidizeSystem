@@ -275,6 +275,26 @@ public class SchoolServiceImpl implements SchoolService {
 		return assembleSchool(save);
 	}
 
+	/**
+	 * @Description 根据用户ID查询学校信息
+	 * @Author byfan
+	 * @Date 2022/4/22 09:31
+	 * @param userId
+	 * @return com.byfan.subsidizesystem.model.SchoolEntity
+	 * @throws SubsidizeSystemException
+	 */
+	@Override
+	public SchoolEntity getByUserId(Integer userId) throws SubsidizeSystemException {
+		if (userId == null){
+			log.error("getByUserId userId is null");
+		}
+		SchoolEntity schoolEntity = schoolDao.findAllByUserId(userId);
+		if (schoolEntity != null){
+			schoolEntity = assembleSchool(schoolEntity);
+		}
+		return schoolEntity;
+	}
+
 
 	/**
 	 * @Description 组装学校信息

@@ -2,7 +2,9 @@ package com.byfan.subsidizesystem.controller;
 
 import com.byfan.subsidizesystem.common.CommonResponse;
 import com.byfan.subsidizesystem.common.BaseResponse;
+import com.byfan.subsidizesystem.common.PageData;
 import com.byfan.subsidizesystem.exception.SubsidizeSystemException;
+import com.byfan.subsidizesystem.form.QueryAttentionForm;
 import com.byfan.subsidizesystem.model.AttentionEntity;
 import com.byfan.subsidizesystem.service.AttentionService;
 import io.swagger.annotations.Api;
@@ -80,10 +82,10 @@ public class AttentionController {
 	 */
 	@ApiOperation("查询全部关注信息信息")
 	@RequestMapping(value = "/getAll",method = RequestMethod.GET)
-	public BaseResponse<List<AttentionEntity>> getAll() {
-		BaseResponse<List<AttentionEntity>> response = new BaseResponse();
+	public BaseResponse<PageData<AttentionEntity>> getAll(QueryAttentionForm attentionForm) {
+		BaseResponse<PageData<AttentionEntity>> response = new BaseResponse();
 		try {
-			List<AttentionEntity> all = attentionService.getAll();
+			PageData<AttentionEntity> all = attentionService.findByQuery(attentionForm);
 			response.setData(all);
 			response.setCode(CommonResponse.OK.code);
 			return response;

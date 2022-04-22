@@ -1,5 +1,6 @@
 package com.byfan.subsidizesystem.service;
 
+import com.byfan.subsidizesystem.bean.AuthenticationInfoBean;
 import com.byfan.subsidizesystem.common.PageData;
 import com.byfan.subsidizesystem.exception.SubsidizeSystemException;
 import com.byfan.subsidizesystem.form.QueryUserForm;
@@ -89,4 +90,14 @@ public interface UserService {
 	 * @throws SubsidizeSystemException
 	 */
 	List<UserEntity> findByDisplayName(String displayName) throws SubsidizeSystemException;
+
+	/**
+	 * @Description 根据用户id获取认证信息
+	 * @Author byfan
+	 * @Date 2022/4/21 23:09
+	 * @param userId
+	 * @return com.byfan.subsidizesystem.bean.AuthenticationInfoBean
+	 * @throws SubsidizeSystemException
+	 */
+	AuthenticationInfoBean getAuthenticationInfor(Integer userId) throws SubsidizeSystemException;
 }

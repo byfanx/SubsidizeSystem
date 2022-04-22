@@ -6,6 +6,7 @@ spring:
     url: jdbc:mysql://124.223.164.57:3308/subsidize_system?characterEncoding=utf-8&serverTimezone=GMT%2B8   # 设置时区为东八区北京时间
     username: root
     password: 123456
+#    password: byfan@170307
   jpa:
     show-sql: true
     generate-ddl: false
@@ -15,7 +16,8 @@ spring:
       hibernate.format_sql: true
   application:
     name: Subsidizesystem-server
-
+#  mysql_native_password
+#  caching_sha2_password
   # 上传文件大小
   servlet:
     multipart:
