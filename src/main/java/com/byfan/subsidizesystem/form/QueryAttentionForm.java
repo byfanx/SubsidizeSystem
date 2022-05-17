@@ -4,8 +4,6 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import javax.persistence.Column;
-
 /**
  * @ClassName: QueryAttentionForm
  * @Description: 关注信息查询条件
@@ -22,9 +20,9 @@ public class QueryAttentionForm extends PageForm{
     private String userDisplayName;
 
     @ApiModelProperty("被关注对象名称")
-    private String followedUserName;
+    private String followedUserDisplayName;
 
-    @ApiModelProperty(value = "认证的身份 4 学生  5 学校")
+    @ApiModelProperty(value = "认证的身份 4 学生  5 学校", required = false)
     private Integer approveIdentity;
 
 }

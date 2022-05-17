@@ -13,9 +13,9 @@ import lombok.Data;
 @ApiModel("关注信息返回对象")
 @Data
 public class AttentionBean {
-    @ApiModelProperty("用户名称")
+    @ApiModelProperty("用户名称（新增时不用传）")
     private String userDisplayName;
 
-    @ApiModelProperty("被关注对象名称")
+    @ApiModelProperty("被关注对象名称（新增时不用传）")
     private String followedUserName;
 }

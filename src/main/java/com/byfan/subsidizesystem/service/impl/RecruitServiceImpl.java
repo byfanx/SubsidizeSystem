@@ -119,6 +119,18 @@ public class RecruitServiceImpl implements RecruitService {
 			public Predicate toPredicate(Root<RecruitEntity> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 				List<Predicate> predicateList = new ArrayList<>();
 				predicateList.add(cb.equal(root.get("status"), StatusEnum.USING.code));
+
+				// 查询条件：招聘者id
+				if (recruitForm.getUserId() != null){
+					if (recruitForm.getLevel() == null)
+					{
+						log.error("findByQuery level is null");
+						throw new SubsidizeSystemException(CommonResponse.PARAM_ERROR, "level is null");
+					}
+					predicateList.add(cb.equal(root.get("userId"), recruitForm.getUserId()));
+					predicateList.add(cb.equal(root.get("level"), recruitForm.getLevel()));
+				}
+
 				// 查询条件：招聘单位
 				if (StringUtils.isNoneBlank(recruitForm.getRecruitmentUnit()) && (recruitForm.getLevel() == null || recruitForm.getLevel() == AuthenticationEnum.SCHOOL.code)){
 					List<SchoolEntity> schoolList = schoolService.findByName(recruitForm.getRecruitmentUnit());
@@ -137,8 +149,8 @@ public class RecruitServiceImpl implements RecruitService {
 				}
 
 				// 查询条件：审核人名称
-				if (StringUtils.isNoneBlank(recruitForm.getAuditorName())){
-					List<UserEntity> userList = userService.findByDisplayName(recruitForm.getAuditorName());
+				if (StringUtils.isNoneBlank(recruitForm.getAuditorDisplayName())){
+					List<UserEntity> userList = userService.findByDisplayName(recruitForm.getAuditorDisplayName());
 					List<Integer> userIds = userList.stream().map(UserEntity::getId).collect(Collectors.toList());
 					if (!CollectionUtils.isEmpty(userIds)){
 						CriteriaBuilder.In<Object> in = cb.in(root.get("auditorId"));
@@ -210,6 +222,24 @@ public class RecruitServiceImpl implements RecruitService {
 		Optional<RecruitEntity> optional = recruitDao.findById(id);
 		RecruitEntity recruitEntity = optional.orElse(null);
 		return recruitEntity == null ? null : assembleRecruitEntity(recruitEntity);
+	}
+
+	/**
+	 * @Description 根据发布者id和发布者身份删除招聘信息
+	 * @Author byfan
+	 * @Date 2022/4/25 23:15
+	 * @param userId
+	 * @param level
+	 * @return void
+	 * @throws SubsidizeSystemException
+	 */
+	@Override
+	public void deleteByUserIdAndLevel(Integer userId, Integer level) throws SubsidizeSystemException {
+		if (userId == null || level == null){
+			log.error("deleteByUserIdAndLevel userId or level is null");
+			throw new SubsidizeSystemException(CommonResponse.PARAM_ERROR, "deleteByUserIdAndLevel userId or level is null");
+		}
+		recruitDao.deleteByUserIdAndLevel(userId, level, StatusEnum.DELETED.code);
 	}
 
 	/**

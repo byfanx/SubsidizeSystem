@@ -56,4 +56,15 @@ public interface RecruitService {
 	 * @throws SubsidizeSystemException
 	 */
     RecruitEntity checkRecruitApprove(Integer recruitId, Integer auditorId, Integer status) throws SubsidizeSystemException;
+
+	/**
+	 * @Description 根据发布者id和发布者身份删除招聘信息
+	 * @Author byfan
+	 * @Date 2022/4/25 23:15
+	 * @param userId
+	 * @param level
+	 * @return void
+	 * @throws SubsidizeSystemException
+	 */
+	void deleteByUserIdAndLevel(Integer userId, Integer level) throws SubsidizeSystemException;
 }

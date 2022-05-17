@@ -69,6 +69,8 @@ public class AttentionServiceImpl implements AttentionService {
 			SchoolEntity school = schoolService.getById(attention.getFollowedUserId());
 			attention.setFollowedUserName(school.getName());
 		}
+		UserEntity user = userService.getById(attention.getUserId());
+		attention.setUserDisplayName(user.getDisplayName());
 		attention.setStatus(StatusEnum.USING.code);
 		return attentionDao.save(attention);
 	}
@@ -100,6 +102,11 @@ public class AttentionServiceImpl implements AttentionService {
 	 */
 	@Override
 	public PageData<AttentionEntity> findByQuery(QueryAttentionForm attentionForm) throws SubsidizeSystemException {
+//		if (attentionForm.getApproveIdentity() == null){
+//			log.error("findByQuery approveIdentity is null");
+//			throw new SubsidizeSystemException(CommonResponse.PARAM_ERROR, "approveIdentity is null");
+//		}
+
 		Sort sort = Sort.by(Sort.Direction.DESC,"createTime");
 
 		attentionForm.setCurrentPage(attentionForm.getCurrentPage() <= 0 ? 1 : attentionForm.getCurrentPage());
@@ -113,10 +120,16 @@ public class AttentionServiceImpl implements AttentionService {
 				List<Predicate> predicateList = new ArrayList<>();
 				predicateList.add(cb.equal(root.get("status"),StatusEnum.USING.code));
 
+				// 查询条件：认证的身份 4 贫困生  5 贫困学校
+				if (attentionForm.getApproveIdentity() != null){
+					predicateList.add(cb.equal(root.get("approveIdentity"),attentionForm.getApproveIdentity()));
+				}
+
 				// 查询条件：用户id
 				if (attentionForm.getUserId() != null){
 					predicateList.add(cb.equal(root.get("userId"),attentionForm.getUserId()));
 				}
+
 				// 查询条件：用户名称
 				if (!StringUtils.isBlank(attentionForm.getUserDisplayName())){
 					List<UserEntity> userList = userService.findByDisplayName(attentionForm.getUserDisplayName());
@@ -129,22 +142,29 @@ public class AttentionServiceImpl implements AttentionService {
 						predicateList.add(in);
 					}
 				}
+
 				// 查询条件：被关注对象名称
-				if (!StringUtils.isBlank(attentionForm.getFollowedUserName())){
-					List<UserEntity> userList = userService.findByDisplayName(attentionForm.getFollowedUserName());
-					List<Integer> userIds = userList.stream().map(UserEntity::getId).collect(Collectors.toList());
-					if (!CollectionUtils.isEmpty(userIds)){
+				if (!StringUtils.isBlank(attentionForm.getFollowedUserDisplayName())){
+					// 最终根据被关注对象查询出来的id
+					List<Integer> followedUserIds = new ArrayList<>();
+					// 根据学生和学校不同对象去查询
+//					if (attentionForm.getApproveIdentity() == AuthenticationEnum.STUDENT.code){
+					List<StudentsEntity> studentList = studentsService.findByName(attentionForm.getFollowedUserDisplayName());
+					List<Integer> stuIds = studentList.stream().map(StudentsEntity::getId).collect(Collectors.toList());
+					followedUserIds.addAll(stuIds);
+//					}else if (attentionForm.getApproveIdentity() == AuthenticationEnum.SCHOOL.code){
+					List<SchoolEntity> schoolList = schoolService.findByName(attentionForm.getFollowedUserDisplayName());
+					List<Integer> schoolIds = schoolList.stream().map(SchoolEntity::getId).collect(Collectors.toList());
+					followedUserIds.addAll(schoolIds);
+//					}
+
+					if (!CollectionUtils.isEmpty(followedUserIds)){
 						CriteriaBuilder.In<Object> in = cb.in(root.get("followedUserId"));
-						for (Integer userId : userIds){
-							in.value(userId);
+						for (Integer followedUserId : followedUserIds){
+							in.value(followedUserId);
 						}
 						predicateList.add(in);
 					}
-				}
-
-				// 查询条件：认证的身份 4 贫困生  5 贫困学校
-				if (attentionForm.getApproveIdentity() != null){
-					predicateList.add(cb.equal(root.get("approveIdentity"),attentionForm.getApproveIdentity()));
 				}
 
 				query.distinct(true);
@@ -171,6 +191,23 @@ public class AttentionServiceImpl implements AttentionService {
 		pageData.setList(result);
 
 		return pageData;
+	}
+
+	/**
+	 * @Description 根据用户id删除关注信息
+	 * @Author byfan
+	 * @Date 2022/4/25 23:00
+	 * @param id
+	 * @return void
+	 * @throws SubsidizeSystemException
+	 */
+	@Override
+	public void deleteByUserId(Integer id) throws SubsidizeSystemException {
+		if (id == null){
+			log.error("deleteByUserId id is null");
+			throw new SubsidizeSystemException(CommonResponse.PARAM_ERROR, "deleteByUserId id is null");
+		}
+		attentionDao.deleteByUserId(id, StatusEnum.DELETED.code);
 	}
 
 	/**

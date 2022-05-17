@@ -1,5 +1,6 @@
 package com.byfan.subsidizesystem.service;
 
+import com.byfan.subsidizesystem.common.AuthenticationEnum;
 import com.byfan.subsidizesystem.common.PageData;
 import com.byfan.subsidizesystem.exception.SubsidizeSystemException;
 import com.byfan.subsidizesystem.form.QueryNoticeForm;

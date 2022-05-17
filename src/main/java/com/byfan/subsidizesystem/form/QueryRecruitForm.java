@@ -13,6 +13,9 @@ import lombok.Data;
 @ApiModel(value = "查询招聘条件")
 @Data
 public class QueryRecruitForm extends PageForm{
+    @ApiModelProperty(value = "招聘者id（如果根据id查询，则一定要传招聘级别 level）")
+    private Integer userId;
+
     @ApiModelProperty("招聘单位")
     private String recruitmentUnit;
 
@@ -20,7 +23,7 @@ public class QueryRecruitForm extends PageForm{
     private Integer level;
 
     @ApiModelProperty("审核人名称")
-    private String auditorName;
+    private String auditorDisplayName;
 
     @ApiModelProperty(value = "标题")
     private String title;

@@ -18,7 +18,7 @@ import javax.persistence.Column;
 @ToString
 public class QuerySchoolForm extends PageForm{
     @ApiModelProperty(value = "用户昵称")
-    private String userDisplayNameName;
+    private String userDisplayName;
 
     @ApiModelProperty(value = "学校名称")
     private String schoolName;
@@ -33,7 +33,7 @@ public class QuerySchoolForm extends PageForm{
     private String telephone;
 
     @ApiModelProperty(value = "审核人名称")
-    private String auditorName;
+    private String auditorDisplayName;
 
     @ApiModelProperty(value = "认证状态 0 待审核  1 通过  2 拒绝")
     private Integer authorizeStatus;

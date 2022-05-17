@@ -18,12 +18,12 @@ import java.util.List;
 @Data
 @ToString
 public class SchoolBean {
-    @ApiModelProperty(value = "用户昵称")
+    @ApiModelProperty(value = "用户昵称（新增时不用传）")
     private String userDisplayName;
 
-    @ApiModelProperty(value = "审核人名称")
+    @ApiModelProperty(value = "审核人名称（新增时不用传）")
     private String auditorName;
 
-    @ApiModelProperty(value = "图片列表")
+    @ApiModelProperty(value = "图片列表（新增时不用传）")
     private List<String> imageList;
 }

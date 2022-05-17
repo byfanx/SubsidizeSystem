@@ -8,6 +8,8 @@ import com.byfan.subsidizesystem.model.ContributionEntity;
 import com.byfan.subsidizesystem.model.SchoolEntity;
 import com.byfan.subsidizesystem.dao.SchoolDao;
 import com.byfan.subsidizesystem.model.UserEntity;
+import com.byfan.subsidizesystem.service.NoticeService;
+import com.byfan.subsidizesystem.service.RecruitService;
 import com.byfan.subsidizesystem.service.SchoolService;
 import com.byfan.subsidizesystem.service.UserService;
 import com.byfan.subsidizesystem.utils.MyUtils;
@@ -48,6 +50,9 @@ public class SchoolServiceImpl implements SchoolService {
 
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private RecruitService recruitService;
 
 	@Value("${noPicturesYetPath}")
 	private String noPicturesYetPath;
@@ -90,9 +95,12 @@ public class SchoolServiceImpl implements SchoolService {
 			log.error("deleteById id is null!");
 			throw new SubsidizeSystemException(CommonResponse.PARAM_ERROR,"deleteById id is null!");
 		}
-		SchoolEntity byId = getById(id);
-		byId.setStatus(StatusEnum.DELETED.code);
-		schoolDao.save(byId);
+		SchoolEntity school = getById(id);
+		// 删除关联的招聘信息
+		recruitService.deleteByUserIdAndLevel(school.getId(), AuthenticationEnum.SCHOOL.code);
+		// 删除学校信息
+		school.setStatus(StatusEnum.DELETED.code);
+		schoolDao.save(school);
 	}
 
 	/**
@@ -115,8 +123,8 @@ public class SchoolServiceImpl implements SchoolService {
 				predicateList.add(cb.equal(root.get("status"),StatusEnum.USING.code));
 
 				// 查询条件：用户昵称
-				if (!StringUtils.isBlank(schoolForm.getUserDisplayNameName())){
-					List<UserEntity> userList = userService.findByDisplayName(schoolForm.getUserDisplayNameName());
+				if (!StringUtils.isBlank(schoolForm.getUserDisplayName())){
+					List<UserEntity> userList = userService.findByDisplayName(schoolForm.getUserDisplayName());
 					List<Integer> userIds = userList.stream().map(UserEntity::getId).collect(Collectors.toList());
 					if (!CollectionUtils.isEmpty(userIds)){
 						CriteriaBuilder.In in = cb.in(root.get("userId"));
@@ -149,8 +157,8 @@ public class SchoolServiceImpl implements SchoolService {
 				}
 
 				// 查询条件：审核人名称
-				if (!StringUtils.isBlank(schoolForm.getAuditorName())){
-					List<UserEntity> userList = userService.findByDisplayName(schoolForm.getAuditorName());
+				if (!StringUtils.isBlank(schoolForm.getAuditorDisplayName())){
+					List<UserEntity> userList = userService.findByDisplayName(schoolForm.getAuditorDisplayName());
 					List<Integer> userIds = userList.stream().map(UserEntity::getId).collect(Collectors.toList());
 					if (!CollectionUtils.isEmpty(userIds)){
 						CriteriaBuilder.In in = cb.in(root.get("auditorId"));
@@ -316,7 +324,7 @@ public class SchoolServiceImpl implements SchoolService {
 		}
 
 		UserEntity auditor = userService.getAllById(school.getAuditorId());
-		if (user == null){
+		if (auditor == null){
 			school.setAuditorName("暂无");
 		}else {
 			school.setAuditorName(auditor.getDisplayName());

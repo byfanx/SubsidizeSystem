@@ -36,7 +36,7 @@ public class QueryStudentForm extends PageForm{
     private String email;
 
     @ApiModelProperty(value = "审核人名称")
-    private String auditorName;
+    private String auditorDisplayName;
 
     @ApiModelProperty(value = "认证状态 0 待审核  1 通过  2 拒绝")
     private Integer authorizeStatus;

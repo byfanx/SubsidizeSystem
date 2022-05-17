@@ -15,7 +15,7 @@ import lombok.ToString;
 @Data
 @ToString
 public class NoticeBean {
-    @ApiModelProperty(value = "发布者名称")
+    @ApiModelProperty(value = "发布者名称（新增时不用传）")
     private String userDisplayName;
 
 }

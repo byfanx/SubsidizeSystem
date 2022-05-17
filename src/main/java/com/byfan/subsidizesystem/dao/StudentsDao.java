@@ -16,5 +16,6 @@ public interface StudentsDao extends BaseRepository<StudentsEntity,Integer> {
     @Query("select se from StudentsEntity se where se.name like concat('%', :name, '%')  and se.status=1")
     List<StudentsEntity> findByName(@Param("name") String name);
 
+    @Query("select se from StudentsEntity se where se.userId=:userId and se.status=1")
     StudentsEntity findAllByUserId(@Param("userId") Integer userId);
 }

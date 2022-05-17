@@ -15,13 +15,13 @@ import lombok.Data;
 @ApiModel("用户认证信息")
 @Data
 public class AuthenticationInfoBean {
-    @ApiModelProperty("认证的身份 4 学生, 5 学校")
+    @ApiModelProperty("认证的身份 4 学生, 5 学校（新增时不用传）")
     private Integer authentication;
 
-    @ApiModelProperty("学生信息")
+    @ApiModelProperty("学生信息（新增时不用传）")
     private StudentsEntity student;
 
-    @ApiModelProperty("学校信息")
+    @ApiModelProperty("学校信息（新增时不用传）")
     private SchoolEntity school;
 
 }

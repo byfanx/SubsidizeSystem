@@ -17,17 +17,20 @@ import lombok.ToString;
 @ToString
 public class QueryContributionForm extends PageForm{
 
+    @ApiModelProperty(value = "捐款人id")
+    private Integer userId;
+
     @ApiModelProperty(value = "捐款人名称")
-    private String userName;
+    private String userDisplayName;
 
     @ApiModelProperty(value = "被捐款对象名称")
-    private String payeeName;
+    private String payeeDisplayName;
 
-    @ApiModelProperty(value = "被捐款对象身份  3 平台 4 贫困生 5 贫困学校")
+    @ApiModelProperty(value = "被捐款对象身份  3 平台 4 贫困生 5 贫困学校", required = true)
     private Integer approveIdentity;
 
     @ApiModelProperty(value = "审核人名称")
-    private String auditorName;
+    private String auditorDisplayName;
 
     @ApiModelProperty(value = "审核状态 0 待审核  1 通过  2 拒绝")
     private Integer authorizeStatus;

@@ -4,6 +4,7 @@ import com.byfan.subsidizesystem.model.ContributionEntity;
 import com.byfan.subsidizesystem.model.SchoolEntity;
 import com.byfan.subsidizesystem.model.StudentsEntity;
 import com.byfan.subsidizesystem.model.UserEntity;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

@@ -103,6 +103,11 @@ public class NoticeServiceImpl implements NoticeService {
 				List<Predicate> predicateList = new ArrayList<>();
 				predicateList.add(cb.equal(root.get("status"),StatusEnum.USING.code));
 
+				// 查询条件：发布者id
+				if (noticeForm.getUserId() != null){
+					predicateList.add(cb.equal(root.get("userId"), noticeForm.getUserId()));
+				}
+
 				// 查询条件：发布者名称
 				if (!StringUtils.isBlank(noticeForm.getUserDisplayName())){
 					List<UserEntity> userList = userService.findByDisplayName(noticeForm.getUserDisplayName());

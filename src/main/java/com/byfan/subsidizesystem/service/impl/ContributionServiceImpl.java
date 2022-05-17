@@ -120,9 +120,14 @@ public class ContributionServiceImpl implements ContributionService {
 				List<Predicate> predicateList = new ArrayList<>();
 				predicateList.add(cb.equal(root.get("status"), StatusEnum.USING.code));
 
+				// 查询条件：捐款人id
+				if (queryContributionForm.getUserId() != null){
+					predicateList.add(cb.equal(root.get("userId"), queryContributionForm.getUserId()));
+				}
+
 				// 查询条件：捐款人名称
-				if (StringUtils.isNotBlank(queryContributionForm.getUserName())) {
-					List<UserEntity> userList = userService.findByDisplayName(queryContributionForm.getUserName());
+				if (StringUtils.isNotBlank(queryContributionForm.getUserDisplayName())) {
+					List<UserEntity> userList = userService.findByDisplayName(queryContributionForm.getUserDisplayName());
 					if (!CollectionUtils.isEmpty(userList)) {
 						List<Integer> userIdList = userList.stream().map(UserEntity::getId).collect(Collectors.toList());
 						CriteriaBuilder.In<Object> in = cb.in(root.get("userId"));
@@ -134,11 +139,11 @@ public class ContributionServiceImpl implements ContributionService {
 				}
 
 				// 查询条件：被捐款对象名称
-				if (StringUtils.isNotBlank(queryContributionForm.getPayeeName())) {
-					List<StudentsEntity> studentList = studentsService.findByName(queryContributionForm.getPayeeName());
+				if (StringUtils.isNotBlank(queryContributionForm.getPayeeDisplayName())) {
+					List<StudentsEntity> studentList = studentsService.findByName(queryContributionForm.getPayeeDisplayName());
 					List<Integer> studentIdList = studentList.stream().map(StudentsEntity::getUserId).collect(Collectors.toList());
 
-					List<SchoolEntity> schoolList = schoolService.findByName(queryContributionForm.getPayeeName());
+					List<SchoolEntity> schoolList = schoolService.findByName(queryContributionForm.getPayeeDisplayName());
 					List<Integer> schoolIdList = schoolList.stream().map(SchoolEntity::getUserId).collect(Collectors.toList());
 
 					List<Integer> payeeIdList = new ArrayList<>();
@@ -162,8 +167,8 @@ public class ContributionServiceImpl implements ContributionService {
 				}
 
 				// 查询条件：审核人名称
-				if (StringUtils.isNotBlank(queryContributionForm.getAuditorName())) {
-					List<UserEntity> userList = userService.findByDisplayName(queryContributionForm.getAuditorName());
+				if (StringUtils.isNotBlank(queryContributionForm.getAuditorDisplayName())) {
+					List<UserEntity> userList = userService.findByDisplayName(queryContributionForm.getAuditorDisplayName());
 					if (!CollectionUtils.isEmpty(userList)) {
 						CriteriaBuilder.In<Object> in = cb.in(root.get("auditorId"));
 						for (UserEntity user : userList) {

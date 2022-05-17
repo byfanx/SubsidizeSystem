@@ -15,10 +15,10 @@ import lombok.ToString;
 @Data
 @ToString
 public class RecruitBean {
-    @ApiModelProperty("招聘单位")
+    @ApiModelProperty("招聘单位（新增时不用传）")
     private String recruitmentUnit;
 
-    @ApiModelProperty("审核人名称")
+    @ApiModelProperty("审核人名称（新增时不用传）")
     private String auditorName;
 
 }

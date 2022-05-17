@@ -16,8 +16,6 @@ spring:
       hibernate.format_sql: true
   application:
     name: Subsidizesystem-server
-#  mysql_native_password
-#  caching_sha2_password
   # 上传文件大小
   servlet:
     multipart:

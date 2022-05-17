@@ -27,7 +27,7 @@ public class AttentionEntity extends AttentionBean implements Serializable {
 	/**
 	 * id
 	 */
-	@ApiModelProperty(value = "id")
+	@ApiModelProperty(value = "id（新增时不用传，编辑时需要传）")
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -36,35 +36,35 @@ public class AttentionEntity extends AttentionBean implements Serializable {
 	/**
 	 * 用户id
 	 */
-	@ApiModelProperty(value = "用户id")
+	@ApiModelProperty(value = "用户id", required = true)
 	@Column(name = "user_id")
 	private Integer userId;
 
 	/**
 	 * 被关注对象的id
 	 */
-	@ApiModelProperty(value = "被关注对象的id")
+	@ApiModelProperty(value = "被关注对象的id", required = true)
 	@Column(name = "followed_user_id")
 	private Integer followedUserId;
 
 	/**
 	 * 认证的身份 4 贫困生  5 贫困学校
 	 */
-	@ApiModelProperty(value = "认证的身份 4 学生  5 学校")
+	@ApiModelProperty(value = "认证的身份 4 学生  5 学校", required = true)
 	@Column(name = "approve_identity")
 	private Integer approveIdentity;
 
 	/**
 	 * 状态  0 删除  1 正常
 	 */
-	@ApiModelProperty(value = "状态  0 删除  1 正常")
+	@ApiModelProperty(value = "状态  0 删除  1 正常（新增时不用传）")
 	@Column(name = "status")
 	private Integer status;
 
 	/**
 	 * 创建时间
 	 */
-	@ApiModelProperty(value = "创建时间")
+	@ApiModelProperty(value = "创建时间（新增时不用传）")
 	@CreatedDate
 	@Column(name = "create_time")
 	private Date createTime;

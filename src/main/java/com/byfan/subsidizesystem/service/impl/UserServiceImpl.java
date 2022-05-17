@@ -6,11 +6,14 @@ import com.byfan.subsidizesystem.common.CommonResponse;
 import com.byfan.subsidizesystem.common.PageData;
 import com.byfan.subsidizesystem.common.StatusEnum;
 import com.byfan.subsidizesystem.exception.SubsidizeSystemException;
+import com.byfan.subsidizesystem.form.QueryAttentionForm;
 import com.byfan.subsidizesystem.form.QueryUserForm;
+import com.byfan.subsidizesystem.model.AttentionEntity;
 import com.byfan.subsidizesystem.model.SchoolEntity;
 import com.byfan.subsidizesystem.model.StudentsEntity;
 import com.byfan.subsidizesystem.model.UserEntity;
 import com.byfan.subsidizesystem.dao.UserDao;
+import com.byfan.subsidizesystem.service.AttentionService;
 import com.byfan.subsidizesystem.service.SchoolService;
 import com.byfan.subsidizesystem.service.StudentsService;
 import com.byfan.subsidizesystem.service.UserService;
@@ -44,6 +47,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private SchoolService schoolService;
+
+	@Autowired
+	private AttentionService attentionService;
 
 	/**
 	 * 新增/保存
@@ -86,11 +92,24 @@ public class UserServiceImpl implements UserService {
 			log.error("deleteById id is null!");
 			throw new SubsidizeSystemException(CommonResponse.PARAM_ERROR,"id is null!");
 		}
-		UserEntity byId = getById(id);
-		if (byId == null || byId.getStatus() == StatusEnum.DELETED.code){
+		UserEntity user = getById(id);
+		if (user == null || user.getStatus() == StatusEnum.DELETED.code){
 			log.info("deleteById user is not exist!");
 			throw new SubsidizeSystemException(CommonResponse.RESOURCE_NOT_EXIST,"用户不存在");
 		}
+		// 关联删除认证的学校信息
+		SchoolEntity school = schoolService.getByUserId(user.getId());
+		if (school != null && school.getStatus() == StatusEnum.USING.code){
+			schoolService.deleteById(school.getId());
+		}
+		// 关联删除认证的学生信息
+		StudentsEntity student = studentsService.getByUserId(user.getId());
+		if (student != null && student.getStatus() == StatusEnum.USING.code){
+			studentsService.deleteById(student.getId());
+		}
+		// 删除关联的关注关系
+		attentionService.deleteByUserId(user.getId());
+		// 删除用户本身
 		userDao.updateStatus(id, StatusEnum.DELETED.code);
 	}
 

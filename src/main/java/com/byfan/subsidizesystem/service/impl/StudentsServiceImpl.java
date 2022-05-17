@@ -6,7 +6,6 @@ import com.byfan.subsidizesystem.common.PageData;
 import com.byfan.subsidizesystem.common.StatusEnum;
 import com.byfan.subsidizesystem.exception.SubsidizeSystemException;
 import com.byfan.subsidizesystem.form.QueryStudentForm;
-import com.byfan.subsidizesystem.model.SchoolEntity;
 import com.byfan.subsidizesystem.model.StudentsEntity;
 import com.byfan.subsidizesystem.dao.StudentsDao;
 import com.byfan.subsidizesystem.model.UserEntity;
@@ -73,11 +72,11 @@ public class StudentsServiceImpl implements StudentsService {
 		}else {
 			students.setStatus(StatusEnum.USING.code);
 			students.setAuditorId(0);
-			students.setAuthorizeStatus(ApprovalStatusEnum.WAIT.code);
 		}
 		if (StringUtils.isBlank(students.getImages())){
 			students.setImages(noPicturesYetPath);
 		}
+		students.setAuthorizeStatus(ApprovalStatusEnum.WAIT.code);
 		return assembleStudent(studentsDao.save(students));
 	}
 
@@ -151,8 +150,8 @@ public class StudentsServiceImpl implements StudentsService {
 				}
 
 				// 查询条件：审核人名称
-				if (!StringUtils.isBlank(studentForm.getAuditorName())){
-					List<UserEntity> userList = userService.findByDisplayName(studentForm.getAuditorName());
+				if (!StringUtils.isBlank(studentForm.getAuditorDisplayName())){
+					List<UserEntity> userList = userService.findByDisplayName(studentForm.getAuditorDisplayName());
 					List<Integer> userIds = userList.stream().map(UserEntity::getId).collect(Collectors.toList());
 					if (!CollectionUtils.isEmpty(userIds)){
 						CriteriaBuilder.In in = cb.in(root.get("auditorId"));

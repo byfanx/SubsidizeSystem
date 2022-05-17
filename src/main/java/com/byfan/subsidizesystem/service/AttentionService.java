@@ -45,4 +45,13 @@ public interface AttentionService {
 	 */
 	AttentionEntity getById(Integer id) throws SubsidizeSystemException;
 
+	/**
+	 * @Description 根据用户id删除关注信息
+	 * @Author byfan
+	 * @Date 2022/4/25 23:00
+	 * @param id
+	 * @return void
+	 * @throws SubsidizeSystemException
+	 */
+	void deleteByUserId(Integer id) throws SubsidizeSystemException;
 }

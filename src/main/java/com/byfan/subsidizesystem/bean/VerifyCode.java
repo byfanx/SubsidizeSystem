@@ -14,12 +14,12 @@ import lombok.Data;
 @Data
 public class VerifyCode {
     // 验证码
-    @ApiModelProperty(value = "验证码")
+    @ApiModelProperty(value = "验证码（新增时不用传）")
     private String code;
     // 图片地址
-    @ApiModelProperty(value = "图片地址")
+    @ApiModelProperty(value = "图片地址（新增时不用传）")
     private String url;
-    // 图片字节ß
-    @ApiModelProperty(value = "字节流")
+    // 图片字节
+    @ApiModelProperty(value = "字节流（新增时不用传）")
     private byte[] imgBytes;
 }

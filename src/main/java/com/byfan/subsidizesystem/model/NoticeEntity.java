@@ -27,7 +27,7 @@ public class NoticeEntity extends NoticeBean implements Serializable {
 	/**
 	 * id
 	 */
-	@ApiModelProperty(value = "id")
+	@ApiModelProperty(value = "id（新增时不用传，编辑时需要传）")
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -36,35 +36,35 @@ public class NoticeEntity extends NoticeBean implements Serializable {
 	/**
 	 * 发布人
 	 */
-	@ApiModelProperty(value = "发布人id")
+	@ApiModelProperty(value = "发布人id", required = true)
 	@Column(name = "user_id")
 	private Integer userId;
 
 	/**
 	 * 标题
 	 */
-	@ApiModelProperty(value = "标题")
+	@ApiModelProperty(value = "标题", required = true)
 	@Column(name = "title")
 	private String title;
 
 	/**
 	 * 发布内容
 	 */
-	@ApiModelProperty(value = "发布内容")
+	@ApiModelProperty(value = "发布内容", required = true)
 	@Column(name = "content")
 	private String content;
 
 	/**
 	 * 状态
 	 */
-	@ApiModelProperty(value = "状态 0 删除  1 正常")
+	@ApiModelProperty(value = "状态 0 删除  1 正常（新增时不用传）")
 	@Column(name = "status")
 	private Integer status;
 
 	/**
 	 * 创建时间
 	 */
-	@ApiModelProperty(value = "创建时间")
+	@ApiModelProperty(value = "创建时间（新增时不用传）")
 	@CreatedDate
 	@Column(name = "create_time")
 	private Date createTime;

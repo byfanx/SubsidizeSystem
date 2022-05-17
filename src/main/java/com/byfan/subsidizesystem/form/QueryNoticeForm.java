@@ -15,6 +15,9 @@ import lombok.ToString;
 @Data
 @ToString
 public class QueryNoticeForm extends PageForm{
+    @ApiModelProperty(value = "发布者id")
+    private Integer userId;
+
     @ApiModelProperty(value = "发布者名称")
     private String userDisplayName;
 
